@@ -29,7 +29,9 @@ describe("Sidebar Component", () => {
 
     test("renders correct icons for links", () => {
         renderWithRouter(<Sidebar />);
-        expect(screen.getAllByTestId("svg-inline--fa").length).toBe(6);
+        expect(screen.getAllByRole("img", { hidden: true }).filter(svg =>
+            svg.classList.contains("sidebar-icon")
+        ).length).toBe(6);
     });
 
     test("highlights Home as active by default on '/' route", () => {
