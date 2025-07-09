@@ -12,52 +12,36 @@ import {
 import "./index.css";
 
 const navLinks = [
-  {
-    label: "Home",
-    icon: faHouse,
-    to: "/", 
-  },
-  {
-    label: "Products",
-    icon: faCartShopping,
-    to: "/products",
-  },
-  {
-    label: "Orders",
-    icon: faFileAlt,
-    to: "/orders",
-  },
-  {
-    label: "Sales",
-    icon: faChartBar,
-    to: "/sales",
-  },
+  { label: "Home", icon: faHouse, to: "/" },
+  { label: "Products", icon: faCartShopping, to: "/products" },
+  { label: "Orders", icon: faFileAlt, to: "/orders" },
+  { label: "Sales", icon: faChartBar, to: "/sales" },
 ];
 
 const bottomLinks = [
-  {
-    label: "Settings",
-    icon: faCog,
-    to: "/settings",
-  },
-  {
-    label: "Log Out",
-    icon: faSignOut,
-    to: "/logout", 
-  },
+  { label: "Settings", icon: faCog, to: "/settings" },
+  { label: "Log Out", icon: faSignOut, to: "/logout" },
 ];
 
-function Sidebar() {
+export function Sidebar() {
   return (
-    <aside className="sidebar">
-      <div>
-        <img src="/logo-white.png" alt="greens mtaani logo" width={150} className="sidebar-logo" />
+    <aside className="sidebar" aria-label="Sidebar navigation">
+      <div className="side-nav">
+        <img
+          src="/logo-white.png"
+          alt="greens mtaani logo"
+          width={150}
+          className="sidebar-logo"
+        />
         <ul>
           {navLinks.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                className={({ isActive }) => isActive ? "active sidebar-link" : "sidebar-link"}
+                aria-label={item.label} 
+                className={({ isActive }) =>
+                  isActive ? "active sidebar-link" : "sidebar-link"
+                }
                 end
               >
                 {({ isActive }) => (
@@ -72,13 +56,16 @@ function Sidebar() {
           ))}
         </ul>
       </div>
-      <div>
+      <div className="">
         <ul>
           {bottomLinks.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                className={({ isActive }) => isActive ? "active sidebar-link" : "sidebar-link"}
+                aria-label={item.label} 
+                className={({ isActive }) =>
+                  isActive ? "active sidebar-link" : "sidebar-link"
+                }
                 end
               >
                 {({ isActive }) => (
@@ -97,4 +84,3 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;

@@ -3,7 +3,12 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import DashboardLayout from ".";
 
-jest.mock("../Sidebar", () => () => <nav data-testid="sidebar">Sidebar</nav>);
+// Fix: Correctly mock named export Sidebar
+jest.mock("../Sidebar", () => ({
+    __esModule: true,
+    Sidebar: () => <nav data-testid="sidebar">Sidebar</nav>,
+}));
+
 jest.mock("react-router-dom", () => ({
     __esModule: true,
     ...jest.requireActual("react-router-dom"),

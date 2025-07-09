@@ -1,15 +1,33 @@
 .dashboard-layout {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    position: relative; 
 }
 
 .sidebar {
     width: 220px;
     background: #00C321;
-    min-height: 100vh;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
 }
 
 .main-content {
     flex: 1;
     padding: 2rem;
-    background: #f9f9f9; }
+    background: #f9f9f9;
+    height: 100vh;
+    overflow-y: auto; 
+}
+
+@media (max-width: 600px) {
+    .sidebar{
+        display: none;
+    }
+}

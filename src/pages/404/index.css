@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding: 1em;
 }
 
 .coming-soon-container h1 {
@@ -17,6 +18,8 @@
     color: #444;
     margin-bottom: 2em;
     font-size: 1.15em;
+    line-height: 1.4;
+    max-width: 400px;
 }
 
 .back-home-btn {
@@ -31,4 +34,22 @@
 }
 
 .back-home-btn:hover {
-    background: #018f19; }
+    background: #018f19;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .coming-soon-container h1 {
+        font-size: 2rem;
+    }
+
+    .coming-soon-container p {
+        font-size: 1em;
+        max-width: 90vw;
+    }
+
+    .back-home-btn {
+        font-size: 1em;
+        padding: 0.6em 1.5em;
+    }
+}
