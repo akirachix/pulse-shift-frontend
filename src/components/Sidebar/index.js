@@ -28,7 +28,7 @@ export function Sidebar() {
     <aside className="sidebar" aria-label="Sidebar navigation">
       <div className="side-nav">
         <img
-          src="/logo-white.png"
+          src="/images/logo-white.png"
           alt="greens mtaani logo"
           width={150}
           className="sidebar-logo"

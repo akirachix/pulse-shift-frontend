@@ -3,7 +3,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import DashboardLayout from ".";
 
-// Fix: Correctly mock named export Sidebar
+
 jest.mock("../Sidebar", () => ({
     __esModule: true,
     Sidebar: () => <nav data-testid="sidebar">Sidebar</nav>,

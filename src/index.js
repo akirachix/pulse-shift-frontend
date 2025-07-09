@@ -4,22 +4,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import DashboardLayout from './components/layout';
-import ComingSoon from './pages/404';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <BrowserRouter>
-  <Routes>
-      <Route element={<DashboardLayout />}>
-        <Route path='/' element={<App />} />
-        <Route path="*" element={<ComingSoon />} />
-      </Route>
-  </Routes>
-  </BrowserRouter>
-
-);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
