@@ -1,12 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import DashboardLayout from './components/Layout';
+import ComingSoon from './pages/404';
+
 
 function App() {
   return (
-    <div className="App">
-      
-    </div>
+    <BrowserRouter future={{ v7_relativeSplatPath: true }}>
+      <Routes>
+          <Route element={<DashboardLayout />}>
+            <Route path="*" element={<ComingSoon />} />
+          </Route>
+      </Routes>
+      </BrowserRouter>
   );
 }
 
