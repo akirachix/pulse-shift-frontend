@@ -7,27 +7,13 @@ import { MemoryRouter } from "react-router-dom";
 import { Sidebar } from ".";  
 
 
-beforeAll(() => {
-    jest.spyOn(console, "warn").mockImplementation((msg) => {
-        if (
-            msg.includes("React Router Future Flag Warning") ||
-            msg.includes("Relative route resolution within Splat routes")
-        ) {
-            return;
-        }
-        console.warn(msg);
-    });
-});
-
-afterAll(() => {
-    console.warn.mockRestore();
-});
-
 
 const renderWithRouter = (ui, { route = "/" } = {}) => {
     return render(ui, {
         wrapper: ({ children }) => (
-            <MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
+            <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }} initialEntries={[route]}>
+                {children}
+            </MemoryRouter>
         ),
     });
 };
@@ -95,11 +81,9 @@ describe("Sidebar Component", () => {
         const productsLink = screen.getByText(/Products/i);
         await user.click(productsLink);
 
-        // After clicking, Products link should be active
         expect(productsLink.closest("a")).toHaveClass("active");
         expect(productsLink.closest("a").querySelector(".sidebar-pill")).toBeInTheDocument();
 
-        // Only one sidebar-pill should exist
         const pills = container.querySelectorAll(".sidebar-pill");
         expect(pills.length).toBe(1);
     });

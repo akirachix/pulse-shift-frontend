@@ -7,7 +7,7 @@ import ComingSoon from './pages/404';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <Routes>
           <Route element={<DashboardLayout />}>
             <Route path="*" element={<ComingSoon />} />

@@ -8,7 +8,7 @@ import userEvent from "@testing-library/user-event";
 describe("ComingSoon component", () => {
     beforeEach(() => {
         render(
-            <MemoryRouter>
+            <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
                 <ComingSoon />
             </MemoryRouter>
         );
