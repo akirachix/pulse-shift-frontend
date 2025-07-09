@@ -17,7 +17,7 @@ describe("ComingSoon component", () => {
     test("renders heading with emojis and text", () => {
         const heading = screen.getByRole("heading", { name: /coming soon/i });
         expect(heading).toBeInTheDocument();
-        expect(heading.textContent).toMatch(/&#128679; Coming Soon &#128679;/);
+        expect(heading.textContent).toMatch(/🚧 Coming Soon 🚧/);
     });
 
     test("renders the informational paragraph", () => {

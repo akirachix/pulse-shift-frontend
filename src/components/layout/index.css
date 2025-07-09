@@ -5,19 +5,6 @@
     position: relative; 
 }
 
-.sidebar {
-    width: 220px;
-    background: #00C321;
-    height: 100vh;
-    position: sticky;
-    top: 0;
-    flex-shrink: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; 
-}
-
 .main-content {
     flex: 1;
     padding: 2rem;
@@ -27,7 +14,5 @@
 }
 
 @media (max-width: 600px) {
-    .sidebar{
-        display: none;
-    }
+   
 }
