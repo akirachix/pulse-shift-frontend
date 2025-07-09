@@ -17,7 +17,7 @@ describe("ComingSoon component", () => {
     test("renders heading with emojis and text", () => {
         const heading = screen.getByRole("heading", { name: /coming soon/i });
         expect(heading).toBeInTheDocument();
-        expect(heading.textContent).toMatch(/🚧 Coming Soon 🚧/);
+        expect(heading.textContent).toMatch(/&#128679; Coming Soon &#128679;/);
     });
 
     test("renders the informational paragraph", () => {
@@ -35,7 +35,6 @@ describe("ComingSoon component", () => {
         const user = userEvent.setup();
         const link = screen.getByRole("link", { name: /back to home/i });
         await user.click(link);
-        // Since this is a link, you can check if it exists and is enabled.
         expect(link).toBeEnabled();
     });
 });
