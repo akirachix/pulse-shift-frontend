@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import DashboardLayout from './components/Layout';
-import ComingSoon from './pages/404';
+import DashboardLayout from './sharedcomponent/Layout';
+import Sales from './Sales/';
+import ComingSoon from './404';
 
 
 function App() {
@@ -10,7 +11,9 @@ function App() {
     <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <Routes>
           <Route element={<DashboardLayout />}>
+            <Route path="/sales" element={<Sales/>} />
             <Route path="*" element={<ComingSoon />} />
+           
           </Route>
       </Routes>
       </BrowserRouter>
