@@ -1,8 +1,13 @@
 import React from 'react';
 import './App.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import DashboardLayout from './components/Layout';
-import ComingSoon from './pages/404';
+import DashboardLayout from './shared-components/Layout';
+import ComingSoon from './404';
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
+import ResetNotification from "./ResetNotification";
+import Verify from "./Verify";
 
 
 function App() {
@@ -11,7 +16,12 @@ function App() {
       <Routes>
           <Route element={<DashboardLayout />}>
             <Route path="*" element={<ComingSoon />} />
+            
           </Route>
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/reset-notification" element={<ResetNotification />} />
+            <Route path="/verify" element={<Verify />} />
       </Routes>
       </BrowserRouter>
   );
