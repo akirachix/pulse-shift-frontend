@@ -1,0 +1,95 @@
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background: white;
+  border: 2px solid #888;
+  border-radius: 6px;
+  padding: 28px 36px 24px 36px;
+  width: 90%; max-width: 750px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute; top: 18px; right: 20px;
+  background: none; border: none;
+  font-size: 28px; cursor: pointer; color: #aaa;
+  transition: color 0.2s;
+}
+.close-btn:hover { color: #22a734; }
+
+.popup-content h3 {
+  color: #00a216; font-weight: 700; font-size: 23px;
+  margin-bottom: 18px;
+}
+
+.order-main-info-row {
+  display: flex; justify-content: space-between;
+  font-size: 17px; margin-bottom: 18px;
+  flex-wrap: wrap; gap: 24px;
+}
+
+.order-info-col {
+  display: flex; flex-direction: column;
+  gap: 7px;
+  min-width: 240px;
+}
+
+.status-pill, .payment-pill {
+  display: inline-block;
+  padding: 3px 16px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  margin-left: 6px;
+}
+
+.status-pill.completed        { background: #00a216; }
+.status-pill.pending         { background: #f9a825; color: #222; }
+.status-pill.processing      { background: #2196f3; }
+.status-pill.cancelled,
+.status-pill.canceled        { background: #9e0404; }
+
+.payment-pill.paid      { background: #22a734; }
+.payment-pill.unpaid    { background: #b60c03; }
+.payment-pill.refunded  { background: #d97a2b; }
+.payment-pill.canceled  { background: #9e0404; }
+
+.order-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.order-items-table th,
+.order-items-table td {
+  padding: 14px 12px 12px 12px;
+  text-align: left;
+  background: white;
+  border-bottom: 1px solid #ececec;
+}
+
+.order-items-table th {
+  background: #e6e3e3;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.order-items-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 700px) {
+  .popup-content { padding: 18px 6px 18px 6px; }
+  .order-main-info-row { flex-direction: column; gap: 12px; }
+  .order-info-col      { min-width: 0; }
+}
+
