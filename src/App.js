@@ -9,14 +9,18 @@ import ResetPassword from "./ResetPassword";
 import ResetNotification from "./ResetNotification";
 import Verify from "./Verify";
 
+import Sales from './Sales/';
+
+
 
 function App() {
   return (
     <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <Routes>
           <Route element={<DashboardLayout />}>
+            <Route path="/sales" element={<Sales/>} />
             <Route path="*" element={<ComingSoon />} />
-            
+
           </Route>
           <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
