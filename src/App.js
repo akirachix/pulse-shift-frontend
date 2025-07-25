@@ -12,7 +12,7 @@ function App() {
     <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <Routes>
           <Route element={<DashboardLayout />}>
-            <Route path="products" element={<ProductPage/>}/>
+            <Route path="/products" element={<ProductPage/>}/>
             <Route path="/sales" element={<Sales/>} />
             <Route path="*" element={<ComingSoon />} />
            

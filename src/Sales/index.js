@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import BarChart from './components/BarChart';
 import PieChart from './components/PieChart';
-import { getSalesData, getPopularProducts } from './components/SalesData';
+import { useSalesData } from '../hooks/useSalesData';
 import './style.css';
+
 const SalesDashboard = () => {
-  const [timeRange, setTimeRange] = useState('month');
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [timeRange, setTimeRange] = useState('month'); 
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); 
   const [selectedWeek, setSelectedWeek] = useState(1);
-  const [salesData, setSalesData] = useState([]);
-  const [popularProducts, setPopularProducts] = useState([]);
-  const [totalSales, setTotalSales] = useState(0);
+  const {
+    salesData,
+    popularProducts,
+    totalSales,
+    loading,
+    error,
+  } = useSalesData(timeRange, selectedMonth, selectedWeek);
   const months = [
     { value: 1, name: 'January' },
     { value: 2, name: 'February' },
@@ -24,87 +29,122 @@ const SalesDashboard = () => {
     { value: 11, name: 'November' },
     { value: 12, name: 'December' },
   ];
+
   const weeks = [
     { value: 1, name: 'Week 1' },
     { value: 2, name: 'Week 2' },
     { value: 3, name: 'Week 3' },
     { value: 4, name: 'Week 4' },
   ];
-  useEffect(() => {
-    const fetchData = async () => {
-      const sales = await getSalesData(timeRange, selectedMonth, selectedWeek);
-      const popular = await getPopularProducts(timeRange, selectedMonth, selectedWeek);
-      setSalesData(sales);
-      setPopularProducts(popular);
-      const total = sales.reduce((sum, item) => sum + item.value, 0);
-      setTotalSales(total);
-    };
-    fetchData();
-  }, [timeRange, selectedMonth, selectedWeek]);
+  if (loading) {
+    return <div className="loading">Loading sales data...</div>;
+  }
+  if (error) {
+    return <div className="error">Error loading sales data: {error.message}</div>;
+  }
+
   return (
     <div className="sales-dashboard">
       <div className="dashboard-header">
         <h1>Sales Report</h1>
         <div className="controls">
-          <div className="time-range-selector">
+          <div
+            className="time-range-selector"
+            role="group"
+            aria-label="Time Range Selector"
+          >
             <button
               className={timeRange === 'month' ? 'active' : ''}
+              aria-pressed={timeRange === 'month'}
               onClick={() => setTimeRange('month')}
             >
               Monthly
             </button>
             <button
               className={timeRange === 'week' ? 'active' : ''}
+              aria-pressed={timeRange === 'week'}
               onClick={() => setTimeRange('week')}
             >
               Weekly
             </button>
           </div>
           <div className="dropdowns">
+            <label htmlFor="month-select" className="visually-hidden">
+              Select Month
+            </label>
             <select
+              id="month-select"
               value={selectedMonth}
-              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+              onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
             >
-              {months.map(month => (
-                <option key={month.value} value={month.value}>{month.name}</option>
+              {months.map((month) => (
+                <option key={month.value} value={month.value}>
+                  {month.name}
+                </option>
               ))}
             </select>
+
             {timeRange === 'week' && (
-              <select
-                value={selectedWeek}
-                onChange={(e) => setSelectedWeek(parseInt(e.target.value))}
-              >
-                {weeks.map(week => (
-                  <option key={week.value} value={week.value}>{week.name}</option>
-                ))}
-              </select>
+              <>
+                <label htmlFor="week-select" className="visually-hidden">
+                  Select Week
+                </label>
+                <select
+                  id="week-select"
+                  value={selectedWeek}
+                  onChange={(e) => setSelectedWeek(parseInt(e.target.value, 10))}
+                >
+                  {weeks.map((week) => (
+                    <option key={week.value} value={week.value}>
+                      {week.name}
+                    </option>
+                  ))}
+                </select>
+              </>
             )}
           </div>
         </div>
       </div>
-      <div className="summary-card">
+      <div
+        className="summary-card"
+        role="region"
+        aria-label="Total Sales Summary"
+      >
         <h3>Total Sales</h3>
-        <p className="total-sales">KES {totalSales.toLocaleString()}</p>
-        <p>{timeRange === 'month' ?
-          `For ${months.find(m => m.value === selectedMonth)?.name}` :
-          `For ${weeks.find(w => w.value === selectedWeek)?.name} of ${months.find(m => m.value === selectedMonth)?.name}`
-        }</p>
+        <p className="total-sales" aria-live="polite">
+          KES {totalSales.toLocaleString()}
+        </p>
+        <p>
+          {timeRange === 'month'
+            ? `For ${months.find((m) => m.value === selectedMonth)?.name || ''}`
+            : `For ${
+                weeks.find((w) => w.value === selectedWeek)?.name || ''
+              } of ${months.find((m) => m.value === selectedMonth)?.name || ''}`}
+        </p>
       </div>
       <div className="charts-container">
-        <div className="chart-wrapper">
+        <section
+          className="chart-wrapper"
+          aria-label="Sales Trend Over Time"
+        >
           <h2>Sales Trend by all Mama Mbogas</h2>
           <div className="chart-container">
             <BarChart data={salesData} timeRange={timeRange} />
           </div>
-        </div>
-        <div className="chart-wrapper">
+        </section>
+
+        <section
+          className="chart-wrapper"
+          aria-label="Top 5 Mama Mbogas by Sales"
+        >
           <h2>Top 5 Mama Mbogas</h2>
           <div className="chart-container">
             <PieChart data={popularProducts} />
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
 };
+
 export default SalesDashboard;

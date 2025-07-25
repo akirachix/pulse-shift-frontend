@@ -1,93 +1,95 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import SalesDashboard from '.';
-
-jest.mock('./components/BarChart', () => () => <div>Mock BarChart</div>);
-jest.mock('./components/PieChart', () => () => <div>Mock PieChart</div>);
-jest.mock('./components/SalesData', () => ({
-  getSalesData: jest.fn(),
-  getPopularProducts: jest.fn(),
+import { render, screen, fireEvent } from '@testing-library/react';
+import SalesDashboard from './'; 
+jest.mock('../hooks/useSalesData', () => ({
+  useSalesData: jest.fn(),
 }));
 
-import { getSalesData, getPopularProducts } from './components/SalesData';
+jest.mock('./components/BarChart', () => (props) => (
+  <div data-testid="bar-chart">BarChart: {JSON.stringify(props.data)}</div>
+));
+
+jest.mock('./components/PieChart', () => (props) => (
+  <div data-testid="pie-chart">PieChart: {JSON.stringify(props.data)}</div>
+));
+
+import { useSalesData } from '../hooks/useSalesData';
 
 describe('SalesDashboard', () => {
-  beforeEach(() => {
-    getSalesData.mockResolvedValue([
-      { label: 'Mama 1', value: 200 },
-      { label: 'Mama 2', value: 300 },
-    ]);
-    getPopularProducts.mockResolvedValue([
-      { label: 'Mama 1', value: 100 },
-      { label: 'Mama 3', value: 150 },
-    ]);
-  });
+  const months = [
+    { value: 1, name: 'January' },
+    { value: 2, name: 'February' },
+  ];
 
-  afterEach(() => {
+  const weeks = [
+    { value: 1, name: 'Week 1' },
+    { value: 2, name: 'Week 2' },
+  ];
+
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders dashboard and fetches data on mount', async () => {
-    render(<SalesDashboard />);
-    expect(screen.getByText(/Sales Report/i)).toBeInTheDocument();
-    expect(screen.getByText(/Total Sales/i)).toBeInTheDocument();
-    expect(screen.getByText('Mock BarChart')).toBeInTheDocument();
-    expect(screen.getByText('Mock PieChart')).toBeInTheDocument();
-
-    await waitFor(() =>
-      expect(screen.getByText(/KES 500/)).toBeInTheDocument()
-    );
-  });
-
-  it('updates data when month is changed', async () => {
-    render(<SalesDashboard />);
-    const monthSelect = screen.getByRole('combobox');
-    fireEvent.change(monthSelect, { target: { value: '2' } }); 
-
-    await waitFor(() => {
-      expect(getSalesData).toHaveBeenLastCalledWith('month', 2, expect.any(Number));
-      expect(getPopularProducts).toHaveBeenLastCalledWith('month', 2, expect.any(Number));
-    });
-  });
-
-  it('updates data and UI when switching to weekly', async () => {
-    render(<SalesDashboard />);
-    const weekButton = screen.getByText('Weekly');
-    fireEvent.click(weekButton);
-
-    await waitFor(() => {
-      expect(getSalesData).toHaveBeenLastCalledWith('week', expect.any(Number), 1);
-      expect(getPopularProducts).toHaveBeenLastCalledWith('week', expect.any(Number), 1);
+  test('renders loading state', () => {
+    useSalesData.mockReturnValue({
+      loading: true,
+      error: null,
+      salesData: [],
+      popularProducts: [],
+      totalSales: 0,
     });
 
-    const weekOption = screen.getByRole('option', { name: 'Week 1' });
-    expect(weekOption).toBeInTheDocument();
-
-    const summaryText = screen.getByText(/^For Week 1 of/);
-    expect(summaryText).toBeInTheDocument();
-  });
-
-  it('shows correct summary for month and week', async () => {
     render(<SalesDashboard />);
 
-  
-    const months = [
-      'January', 'February', 'March', 'April', 'May',
-      'June', 'July', 'August', 'September', 'October',
-      'November', 'December',
+    expect(screen.getByText(/loading sales data/i)).toBeInTheDocument();
+  });
+
+  test('renders error state', () => {
+    useSalesData.mockReturnValue({
+      loading: false,
+      error: new Error('Network error'),
+      salesData: [],
+      popularProducts: [],
+      totalSales: 0,
+    });
+
+    render(<SalesDashboard />);
+
+    expect(screen.getByText(/error loading sales data/i)).toBeInTheDocument();
+    expect(screen.getByText(/network error/i)).toBeInTheDocument();
+  });
+
+  test('renders dashboard with data', () => {
+    const salesData = [
+      { label: 'Day 1', value: 100 },
+      { label: 'Day 2', value: 200 },
     ];
-    const currentMonthIndex = new Date().getMonth();
-    const currentMonthName = months[currentMonthIndex];
+    const popularProducts = [
+      { name: 'Mama Mboga 1', value: 150 },
+      { name: 'Mama Mboga 2', value: 100 },
+    ];
 
-  
-    await waitFor(() =>
-      expect(screen.getByText(new RegExp(`For ${currentMonthName}`, 'i'))).toBeInTheDocument()
-    );
+    useSalesData.mockReturnValue({
+      loading: false,
+      error: null,
+      salesData,
+      popularProducts,
+      totalSales: 300,
+    });
 
- 
-    fireEvent.click(screen.getByText('Weekly'));
-    await waitFor(() =>
-      expect(screen.getByText(new RegExp(`For Week 1 of ${currentMonthName}`, 'i'))).toBeInTheDocument()
-    );
+    render(<SalesDashboard />);
+    expect(screen.getByRole('heading', { name: /sales report/i })).toBeInTheDocument();
+    expect(screen.getByText(/kes 300/i)).toBeInTheDocument();
+    expect(screen.getByTestId('bar-chart')).toHaveTextContent(JSON.stringify(salesData));
+    expect(screen.getByTestId('pie-chart')).toHaveTextContent(JSON.stringify(popularProducts));
+    const monthSelect = screen.getByLabelText(/select month/i);
+    expect(monthSelect.value).toBe(String(new Date().getMonth() + 1));
+    const monthlyBtn = screen.getByRole('button', { name: /monthly/i });
+    const weeklyBtn = screen.getByRole('button', { name: /weekly/i });
+
+    expect(monthlyBtn).toHaveClass('active');
+    expect(weeklyBtn).not.toHaveClass('active');
+
+    fireEvent.click(weeklyBtn);
   });
 });

@@ -1,57 +1,45 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import BarChart from '.';
-
-
+import BarChart from './index'; 
 jest.mock('react-chartjs-2', () => ({
-  Bar: (props) => <div data-testid="bar-chart">{JSON.stringify(props.data)}</div>
+  Bar: (props) => (
+    <div data-testid="bar-chart-mock">
+      <div>Labels: {props.data.labels.join(', ')}</div>
+      <div>Data: {props.data.datasets[0].data.join(', ')}</div>
+      <div>Title: {props.options.plugins.title.text}</div>
+    </div>
+  )
 }));
 
-
-jest.mock('chart.js', () => {
-  const actualChart = jest.requireActual('chart.js');
-  return {
-    ...actualChart,
-    Chart: {
-      register: jest.fn(),
-    },
-    CategoryScale: jest.fn(),
-    LinearScale: jest.fn(),
-    BarElement: jest.fn(),
-    Title: jest.fn(),
-    Tooltip: jest.fn(),
-    Legend: jest.fn(),
-  };
-});
-
 describe('BarChart component', () => {
-  it('renders with given data and timeRange "month"', () => {
-    const testData = [
-      { label: '1', value: 100 },
-      { label: '2', value: 150 },
-      { label: '3', value: 200 },
-    ];
+  const sampleData = [
+    { label: 'Day 1', value: 100 },
+    { label: 'Day 2', value: 200 },
+    { label: 'Day 3', value: 150 },
+  ];
 
-    render(<BarChart data={testData} timeRange="month" />);
-    const bar = screen.getByTestId('bar-chart');
+  test('renders BarChart with monthly timeRange', () => {
+    render(<BarChart data={sampleData} timeRange="month" />);
 
-    expect(bar).toBeInTheDocument();
-    expect(bar.textContent).toContain('1');
-    expect(bar.textContent).toContain('100');
+    const barChartMock = screen.getByTestId('bar-chart-mock');
+    expect(barChartMock).toBeInTheDocument();
+    expect(barChartMock).toHaveTextContent('Labels: Day 1, Day 2, Day 3');
+    expect(barChartMock).toHaveTextContent('Data: 100, 200, 150');
+    expect(barChartMock).toHaveTextContent('Title: Daily Sales for the Month');
   });
 
-  it('renders with given data and timeRange "week"', () => {
-    const testData = [
-      { label: 'Mon', value: 50 },
-      { label: 'Tue', value: 75 },
-      { label: 'Wed', value: 125 },
-    ];
+  test('renders BarChart with weekly timeRange', () => {
+    render(<BarChart data={sampleData} timeRange="week" />);
 
-    render(<BarChart data={testData} timeRange="week" />);
-    const bar = screen.getByTestId('bar-chart');
+    const barChartMock = screen.getByTestId('bar-chart-mock');
+    expect(barChartMock).toBeInTheDocument();
+    expect(barChartMock).toHaveTextContent('Title: Daily Sales for the Week');
+  });
 
-    expect(bar).toBeInTheDocument();
-    expect(bar.textContent).toContain('Mon');
-    expect(bar.textContent).toContain('50');
+  test('renders empty data without crashing', () => {
+    render(<BarChart data={[]} timeRange="month" />);
+    expect(screen.getByTestId('bar-chart-mock')).toBeInTheDocument();
+    expect(screen.getByTestId('bar-chart-mock')).toHaveTextContent('Labels: ');
+    expect(screen.getByTestId('bar-chart-mock')).toHaveTextContent('Data: ');
   });
 });
