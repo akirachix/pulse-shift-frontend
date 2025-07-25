@@ -52,16 +52,13 @@
   margin-left: 6px;
 }
 
-.status-pill.completed        { background: #00a216; }
+.status-pill.confirmed        { background: #00a216; }
 .status-pill.pending         { background: #f9a825; color: #222; }
-.status-pill.processing      { background: #2196f3; }
-.status-pill.cancelled,
-.status-pill.canceled        { background: #9e0404; }
 
-.payment-pill.paid      { background: #22a734; }
-.payment-pill.unpaid    { background: #b60c03; }
-.payment-pill.refunded  { background: #d97a2b; }
-.payment-pill.canceled  { background: #9e0404; }
+
+.payment-pill.confirmed      { background: #22a734; }
+.payment-pill.pending    { background: #b60c03; }
+
 
 .order-items-table {
   width: 100%;

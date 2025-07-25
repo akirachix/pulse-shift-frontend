@@ -51,14 +51,14 @@ const Orders = ({ onSelectMamaMboga }) => {
 
     if (!matchesSearch) return false;
 
-    if (filter === "notCompleted") return order.current_status !== "Completed";
-    return true;
+    if (filter === "pending") return order.current_status?.toLowerCase() === "pending";
+    if (filter === "confirmed") return order.current_status?.toLowerCase() === "confirmed";
+    return true; 
   });
 
-  const displayedOrders =
-    filter === "lastAdded"
-      ? [...filteredOrders].sort((a, b) => new Date(b.order_date) - new Date(a.order_date))
-      : filteredOrders;
+  const displayedOrders = [...filteredOrders].sort(
+    (a, b) => new Date(b.order_date) - new Date(a.order_date)
+  );
 
   const indexOfLastOrder = currentPage * ORDERS_PER_PAGE;
   const indexOfFirstOrder = indexOfLastOrder - ORDERS_PER_PAGE;
@@ -67,8 +67,11 @@ const Orders = ({ onSelectMamaMboga }) => {
 
   const formatDateTime = (dateStr) => {
     return new Date(dateStr).toLocaleString(undefined, {
-      year: "numeric", month: "short", day: "numeric",
-      hour: "2-digit", minute: "2-digit"
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -85,6 +88,14 @@ const Orders = ({ onSelectMamaMboga }) => {
   const handlePaymentClick = (orderId) => {
     alert(`Payment details for Order ID: ${orderId}`);
   };
+
+  console.log("Orders:", orders);
+  console.log("Filter:", filter);
+  console.log("Filtered Orders:", filteredOrders);
+  console.log(
+    "Unique Statuses:",
+    [...new Set(orders.map(order => order.current_status))].filter(Boolean)
+  );
 
   return (
     <div className="orders-page">
@@ -110,25 +121,29 @@ const Orders = ({ onSelectMamaMboga }) => {
           className="filter-select"
         >
           <option value="all">All Orders</option>
-          <option value="lastAdded">Last Added</option>
-          <option value="notCompleted">Not Completed</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
         </select>
       </div>
 
       {isLoading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
+      {!isLoading && !error && filteredOrders.length === 0 && (
+        <p className="no-orders">
+          No orders match the selected filter ({filter === "pending" ? "Pending" : filter === "confirmed" ? "Confirmed" : "All"}).
+        </p>
+      )}
 
       <table className="orders-table">
         <thead>
           <tr>
-            
             <th>Order ID</th>
             <th>Customer Name</th>
             <th>Kiosk Name</th>
             <th>Order Status</th>
             <th>Payment</th>
             <th>Date</th>
-            <th></th> {}
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -147,46 +162,44 @@ const Orders = ({ onSelectMamaMboga }) => {
                   onClick={() => openOrderDetails(order)}
                   style={{ cursor: "pointer" }}
                 >
-                  
                   <td>{order.order_id}</td>
                   <td>{customerName}</td>
                   <td>{kioskName}</td>
-                  <td className={`status ${order.current_status.toLowerCase()}`}>
-                    {order.current_status}
+                  <td className={`status ${order.current_status?.toLowerCase() || ""}`}>
+                    {order.current_status || "Unknown"}
                   </td>
                   <td onClick={e => e.stopPropagation()}>
-                    {order.payment_status.toLowerCase() === "unpaid" ? (
+                    {order.payment_status?.toLowerCase() === "pending" ? (
                       <button
-                        className="payment-btn unpaid"
+                        className="payment-btn pending"
                         onClick={() => handlePaymentClick(order.order_id)}
                       >
-                        Unpaid
+                        pending
                       </button>
-                    ) : order.payment_status.toLowerCase() === "canceled" || index === 6 ? (
+                    ) : order.payment_status?.toLowerCase() === "canceled" || index === 6 ? (
                       <button
                         className="payment-btn refund"
                         onClick={() => alert(`Order ID ${order.order_id} is refunded/canceled.`)}
                       >
-                        Refund
+                        refund
                       </button>
                     ) : (
                       <button
                         className="payment-btn"
                         onClick={() => handlePaymentClick(order.order_id)}
                       >
-                        {order.payment_status}
+                        {order.payment_status || "Unknown"}
                       </button>
                     )}
                   </td>
                   <td>{formatDateTime(order.order_date)}</td>
-                  <td className="view-column">View</td> {}
+                  <td className="view-column">View</td>
                 </tr>
               );
             })
           )}
         </tbody>
       </table>
-
 
       {totalPages > 1 && (
         <div className="pagination">

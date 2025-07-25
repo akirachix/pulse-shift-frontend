@@ -109,7 +109,7 @@ body{
   justify-content: center;
   font-size: 0.9em;
 }
-.status.completed {
+.status.confirmed {
   border: solid #22a734 4px;
   border-radius: 15px;
   color: green;
@@ -121,16 +121,7 @@ body{
   color: rgb(170, 145, 5);
 }
 
-.status.processing {
-  border: solid #3ea9b1 4px;
-  border-radius: 15px;
-  color: rgb(8, 112, 138);
-}
-.status.cancelled{
-    border: solid #9e0404 4px;
-  border-radius: 15px;
-  color: rgb(145, 3, 3);
-}
+
 .payment-btn {
   padding: 6px 0;
   width: 100px;   
@@ -150,20 +141,13 @@ body{
   font-weight: 400; 
 }
 
-.payment-btn.unpaid {
-  background-color: #b60c03; 
+.payment-btn.confirmd{
+  background-color: #00a216;
 }
 
-.payment-btn.refund {
-  background-color: #d97a2b !important; 
+.payment-btn.pending {
+  background-color: #b60c03 !important; 
   color: white;
-}
-.payment-btn.unpaid:hover {
-  background-color: #720b04; 
-}
-
-.payment-btn.refund:hover {
-  background-color: #b55f15;
 }
 .top-bar {
   display: flex;
