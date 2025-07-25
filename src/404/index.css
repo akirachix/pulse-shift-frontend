@@ -19,7 +19,6 @@
     margin-bottom: 2em;
     font-size: 1.15em;
     line-height: 1.4;
-    /* max-width: 400px; */
 }
 
 .back-home-btn {
@@ -36,8 +35,6 @@
 .back-home-btn:hover {
     background: #018f19;
 }
-
-/* Responsive adjustments */
 @media (max-width: 600px) {
     .coming-soon-container h1 {
         font-size: 2rem;

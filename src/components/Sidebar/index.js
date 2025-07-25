@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHouse,
   faCartShopping,
@@ -10,12 +10,14 @@ import {
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
+import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 
 const navLinks = [
   { label: "Home", icon: faHouse, to: "/" },
   { label: "Products", icon: faCartShopping, to: "/products" },
   { label: "Orders", icon: faFileAlt, to: "/orders" },
   { label: "Sales", icon: faChartBar, to: "/sales" },
+  { label: "Users", icon: faUser, to: "/profile" },
 ];
 
 const bottomLinks = [
@@ -38,7 +40,7 @@ export function Sidebar() {
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                aria-label={item.label} 
+                aria-label={item.label}
                 className={({ isActive }) =>
                   isActive ? "active sidebar-link" : "sidebar-link"
                 }
@@ -47,7 +49,11 @@ export function Sidebar() {
                 {({ isActive }) => (
                   <>
                     {isActive && <div className="sidebar-pill"></div>}
-                    <FontAwesomeIcon icon={item.icon} className="sidebar-icon" />
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="sidebar-icon"
+                      data-testid="sidebar-icon"  
+                    />
                     <span>{item.label}</span>
                   </>
                 )}
@@ -56,13 +62,13 @@ export function Sidebar() {
           ))}
         </ul>
       </div>
-      <div className="">
+      <div>
         <ul>
           {bottomLinks.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                aria-label={item.label} 
+                aria-label={item.label}
                 className={({ isActive }) =>
                   isActive ? "active sidebar-link" : "sidebar-link"
                 }
@@ -71,7 +77,11 @@ export function Sidebar() {
                 {({ isActive }) => (
                   <>
                     {isActive && <div className="sidebar-pill"></div>}
-                    <FontAwesomeIcon icon={item.icon} className="sidebar-icon" />
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="sidebar-icon"
+                      data-testid="sidebar-icon"  
+                    />
                     <span>{item.label}</span>
                   </>
                 )}
@@ -83,4 +93,3 @@ export function Sidebar() {
     </aside>
   );
 }
-
