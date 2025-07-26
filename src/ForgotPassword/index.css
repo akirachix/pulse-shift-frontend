@@ -1,0 +1,1118 @@
+html, body {
+overflow-x: hidden; 
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.forgot-root {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  background: #fff;
+}
+
+.forgot-image-side {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+  background: #f6faf6;
+  min-width: 0;
+  position: relative;
+}
+
+.forgot-image {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  object-position: center right;
+  filter: brightness(0.4);
+  display: block;
+}
+
+
+.forgot-advert-text {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+  font-family: inherit;
+}
+
+.forgot-advert-green {
+  color: white;
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 40%;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: block;
+}
+
+.forgot-advert-orange {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-top: 0.5em;
+  display: block;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.forgot-form-side {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px 20px 0;
+  min-width: 0;
+}
+
+.forgot-form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.forgot-title {
+  font-size: 3.4rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: inline-block;
+  margin-left: -8px;
+  text-align: left;
+  white-space: nowrap;
+  color: #00A216;
+  font-family: inherit;
+  letter-spacing: 1px;
+}
+
+.forgot-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.forgot-label {
+  font-size: 1.5rem;
+  color: #222;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.forgot-input {
+  width: 110%;
+  padding: 0.85em 0.9em;
+  font-size: 1.1rem;
+  border: 2px solid #222;
+  border-radius: 7px;
+  outline: none;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.forgot-input:focus {
+  border-color: #00A216;
+}
+
+.forgot-submit {
+  margin-top: 1.5rem;
+  background: #00A216;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: bolder;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7em;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 65%;
+  margin-left: 24%;
+}
+
+.forgot-submit:hover {
+  background: #00A216;
+  transform: scale(1.02);
+}
+
+.forgot-success {
+  font-size: 1rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+@media (min-width: 1280px) and (max-width: 1280.98px) {
+  .forgot-root {
+    flex-direction: row;
+    overflow-x: hidden;
+  }
+    .forgot-label {
+    font-size: 1.9rem!important;
+
+  }
+   .forgot-input::placeholder {
+    font-size: 1.5rem;
+  }
+.forgot-image-side,
+  .forgot-form-side {
+    width: 50%;
+  }
+    .forgot-input-group {
+    gap: 0px;
+  }
+  .forgot-image-side {
+    height: 100vh;
+  }
+  .forgot-image {
+    height: 100%;
+    object-position: center right;
+  }
+  .forgot-title {
+    font-size: 54px;
+  }
+  
+.forgot-advert-green {
+    font-size: 3rem!important;
+  }
+ 
+.forgot-advert-orange {
+    font-size: 2.3rem!important;
+  }
+  .forgot-form {
+    max-width: 400px;
+  }
+  .forgot-form-side {
+    margin-top: -4%;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    padding: 0.7em;
+    width: 109.5%;
+    padding: 1.1em 2.5em 1.1em 1em!important;
+  }
+  .forgot-password-wrapper {
+    width: 109%;
+  }
+  .forgot-submit {
+    width: 60%;
+    margin-left: 22.5%;
+    padding: 4%;
+    margin-top: 2%;
+  }
+  .forgot-footer {
+    margin-top: 10px!important;
+    margin-left: 3%;
+  }
+}
+
+
+@media (min-width: 1024px) and (max-width: 1024.98px) and (min-height: 701px) {
+  .forgot-root {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+   .forgot-form-side {
+    margin-top: 2%!important;
+  }
+  .forgot-input::placeholder {
+    font-size: 1.9rem;
+  }
+  .forgot-image-side {
+    max-height: 70vh!important;
+    width: 99vw;
+  }
+  .forgot-signin-link {
+    margin-right:20px;
+    font-size: 2rem;
+    text-decoration: none;
+    margin-top: 0.9%;
+  }
+  .forgot-image {
+    height: 50vh;
+    object-position: center;
+  }
+  .forgot-title {
+    font-size: 75px;
+    margin-left: 18%;
+  }
+  .forgot-advert-green {
+    margin-top: 46%!important;
+    font-size: 5rem!important;
+    margin-top: 15%!important;
+  }
+  .forgot-advert-orange {
+    font-size: 3.8rem!important;
+  }
+  .forgot-label {
+    font-size: 2.9rem!important;
+    margin-left: 2%;
+  }
+  .forgot-form {
+    min-height:50vh;
+    min-width: 97vw;
+    margin-top:5% ;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    padding: 0.7em;
+    width: 100.7%;
+    padding: 2.6em 2.5em 2.6em 1.4em;
+  }
+  .forgot-password-wrapper {
+    width: 101%;
+  }
+  .forgot-submit {
+    width: 44%;
+    margin: 0 auto;
+    padding: 30px;
+    font-size: 3rem;
+    margin-top: 4%;
+  }
+  .forgot-footer {
+    font-size: 35px;
+    margin-left:1% ;
+  }
+}
+
+
+@media (min-width: 1024px) and (max-width: 1024.98px) and (max-height: 700px) {
+   .forgot-root {
+    flex-direction: row;
+    overflow-x: hidden;
+  }
+      .forgot-label {
+    font-size: 1.8rem!important;
+
+  }
+  .forgot-form{
+    gap: 0.8rem!important;
+    margin-top: -0%!important;
+  }
+  .forgot-input::placeholder {
+    font-size: 1rem;
+  }
+  .forgot-signin-link {
+    margin-right:20px;
+    font-size: 1.1rem;
+    margin-top: 1%;
+    text-decoration: none;
+  }
+  .forgot-footer {
+    font-size: 19px;
+    margin-left:1%;
+    margin-top: 0.5%;
+  }
+  .forgot-password-wrapper {
+    width: 108.5%;
+  }
+  .forgot-image-side,
+  .forgot-form-side {
+    width: 50%;
+  }
+  .forgot-form-side {
+    margin-top: -6%!important;
+  }
+  .forgot-password-toggle {
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 2;
+    min-width:48px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .forgot-input {
+    width: 108.8%;
+    padding: 0.9em 0.7em 0.9em 0.9em;
+  }
+  .forgot-input-group {
+    gap: 0px;
+  }
+  .forgot-image-side {
+    height: 100vh;
+  }
+  .forgot-image {
+    height: 100%;
+    object-position: center right;
+  }
+  .forgot-title {
+    font-size: 45px;
+    margin-left: 6%;
+
+  }
+  .forgot-advert-green {
+    font-size: 2.4rem!important;
+  }
+  .forgot-advert-orange {
+    font-size: 2rem!important;
+  }
+  .forgot-form {
+    max-width: 400px;
+  }
+  .forgot-submit {
+    width: 65%;
+    margin-left: 22%;
+    padding: 3.5%;
+    margin-top: 2.5%;
+  }
+  .forgot-footer {
+    margin-top: 2%;
+    margin-left:10%;
+  }
+}
+
+
+@media (min-width: 912px) and (max-width: 912.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+
+  .forgot-image-side {
+    min-height: 40vh!important;
+    width: 100vw;
+  }
+  .forgot-image {
+  width: 100%;
+  height: 50vh!important;
+
+}
+ 
+  .forgot-advert-green {
+    font-size: 4.4rem!important;
+    margin-top: 20%!important;
+  }
+  .forgot-advert-orange {
+    font-size: 3.5rem!important;
+  }
+  .forgot-form {
+    max-width: 98vw!important;
+  }
+  .forgot-title {
+    font-size: 75px!important;
+    margin-left: 15%;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    padding: 0.7em;
+    width: 102%;
+    padding: 2.7em 2.6em 2.6em 0.9em!important;
+  }
+  .forgot-password-wrapper {
+    width: 102%;
+  }
+  .forgot-submit {
+    width: 45%!important;
+    padding: 35px!important;
+    font-size: 2.5rem;
+  }
+    .forgot-label {
+    font-size: 2.8rem!important;
+    margin-left: 2%;
+  }
+    .forgot-input::placeholder {
+    font-size: 2.2rem!important;
+  }
+    .forgot-footer {
+    font-size: 32px;
+    margin-left:2.6%;
+  }
+
+}
+
+@media (min-width: 853px) and (max-width: 853.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-image-side {
+    max-height: 50vh;
+    width: 99vw;
+  }
+  .forgot-input-group {
+    gap: 0px;
+  }
+    .forgot-input-group {
+    gap: 5px;
+  }
+  .forgot-signin-link {
+    margin-right:20px;
+    font-size: 1.6rem;
+  }
+   .forgot-label {
+    font-size: 1.6rem!important;
+    margin-left: 2%;
+  }
+  .forgot-input::placeholder {
+    font-size: 1.4rem!important;
+  }
+  .forgot-footer {
+    font-size: 26px;
+    margin-left:2%;
+  }
+  .forgot-advert-green {
+    font-size: 4rem!important;
+    margin-top: 20%!important;
+  }
+  .forgot-label {
+    font-size: 2.6rem!important;
+    margin-left: 2%;
+  }
+  .forgot-advert-orange {
+    font-size: 3rem!important;
+  }
+  .forgot-form {
+    max-width: 96.5vw!important;
+  }
+  .forgot-title {
+    font-size: 4.3rem!important;
+    margin-left: 15%;
+    
+  }
+  .forgot-input {
+    font-size: 1rem;
+    padding: 0.7em;
+    width: 101%;
+    padding: 2em 2.5em 2em 1em;
+  }
+  .forgot-password-wrapper {
+    width: 101%;
+  }
+  .forgot-submit {
+    margin-top: 5%;
+    width: 45%!important;
+    padding: 3.2%!important;
+    font-size: 1.9rem;
+  }
+  .forgot-input::placeholder {
+    font-size: 1.7rem;
+  }
+}
+
+@media (min-width: 820px) and (max-width: 820.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-image-side {
+    max-height: 78vh;
+    max-width: 98vw;
+  }
+    .forgot-image {
+  width: 100%;
+  height: 50vh!important;
+
+}
+  .forgot-input-group {
+    gap: 0px;
+  }
+  .forgot-input::placeholder {
+    font-size: 1.7rem;
+  }
+  .forgot-advert-green {
+    font-size: 3.8rem!important;
+    margin-top: 18%!important;
+  }
+  .forgot-advert-orange {
+    font-size: 2.9rem!important;
+  }
+  .forgot-form {
+    max-width: 97vw!important;
+    margin-top: -20%;
+  }
+  .forgot-title {
+    font-size: 65px!important;
+    margin-left: 17%;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    width: 100.8%!important;
+    padding: 2em 2.5em 1.5em 2em;
+  }
+  .forgot-password-wrapper {
+    width: 100.5%;
+  }
+  .forgot-submit {
+    width: 49%!important;
+    padding: 25px;
+    font-size: 2.5rem;
+    margin-top: 5%!important;
+  }
+  .forgot-footer {
+    font-size: 26px;
+    margin-left:2.6%;
+  }
+  .forgot-signin-link {
+    margin-right:20px;
+    font-size: 1.6rem;
+  }
+  .forgot-label {
+    font-size: 2.4rem!important;
+    margin-left: 2%;
+  }
+  .forgot-footer {
+    font-size: 26px;
+    margin-left:2%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 768.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-image-side {
+    max-height: 80vh;
+    max-width: 100vw;
+  }
+    .forgot-input::placeholder {
+    font-size: 1.6rem!important;
+  }
+     .forgot-image {
+    width: 102%;
+    height: 50vh!important;
+  }
+  .forgot-input-group {
+    gap: 0px;
+  }
+  .forgot-input::placeholder {
+    font-size: 1.4rem;
+  }
+  .forgot-advert-green {
+    font-size: 3.5rem!important;
+    margin-top: 13%!important;
+  }
+  .forgot-advert-orange {
+    font-size: 2.6rem!important;
+  }
+  .forgot-form {
+    min-width: 97vw!important;
+    margin-top: -10%;
+  }
+  .forgot-title {
+    font-size: 3.9rem!important;
+    margin-left: 16%;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    width: 102.5%!important;
+    padding: 1.6em 2.5em 1.6em 0.9em;
+  }
+  .forgot-password-wrapper {
+    width: 102.5%;
+  }
+  .forgot-submit {
+    width: 45%!important;
+    padding: 21px;
+    font-size: 1.8rem;
+    margin-top: 2%!important;
+  }
+  .forgot-footer {
+    font-size: 26px;
+    margin-left:2.6%;
+  }
+  .forgot-signin-link {
+    margin-right:20px;
+    font-size: 1.6rem;
+  }
+  .forgot-label {
+    font-size: 2.3rem!important;
+    margin-left: 2%;
+  }
+}
+
+
+@media (min-width: 540px) and (max-width: 540.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-image-side {
+    height: 40vh;
+    min-width: 100vw!important;
+  }
+    .forgot-input-group {
+    gap: 0px;
+  }
+  .forgot-password-toggle {
+    right: -10px;
+  }
+    .forgot-image {
+    width: 102%;
+    height: 50vh!important;
+  }
+  .forgot-input::placeholder {
+    font-size: 1.1rem;
+  }
+  .forgot-label {
+    font-size: 1.9rem!important;
+    margin-left: 2%;
+  }
+  .forgot-advert-green {
+    font-size: 2.5rem;
+    margin-top: 15%!important;
+  }
+  .forgot-signin-link {
+    margin-right:20px;
+    font-size: 1.3rem;
+  }
+  .forgot-advert-orange {
+    font-size: 2.9rem!important;
+  }
+  .forgot-form {
+    min-width: 80vw!important;
+  }
+  .forgot-title {
+    font-size: 45px!important;
+    margin-left: 15%;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    padding: 0.7em;
+    width: 103.5%!important;
+    padding: 1.2em 2.5em 1.2em 0.9em!important;
+
+  }
+  .forgot-footer {
+    font-size: 1.5rem;
+  }
+  .forgot-password-wrapper {
+    width: 103.7%!important;
+  }
+  .forgot-advert-green {
+    font-size: 2.6rem!important;
+  }
+  .forgot-advert-orange {
+    font-size: 2rem!important;
+  }
+  .forgot-title {
+    font-size: 40px;
+  }
+  .forgot-form {
+    max-width: 100%!important;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    padding: 0.7em;
+    min-width: 92.4%;
+    padding: 0.9em 2.5em 0.85em 0.9em;
+  }
+  .forgot-password-toggle {
+
+  right: 2px;
+ 
+}
+
+  .forgot-password-wrapper {
+    width: 100%;
+  }
+  .forgot-submit {
+    font-size: 1.4rem;
+    padding: 3%;
+    width: 50%!important;
+  }
+}
+
+
+@media (min-width: 430px) and (max-width: 430.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-image-side {
+    height: 40vh;
+  }
+    .forgot-image {
+    height: 50vh!important;
+  }
+  .forgot-advert-green {
+    font-size: 2.1rem!important;
+    margin-top:25%;
+  }
+  .forgot-advert-orange {
+    font-size: 1.7rem!important;
+  }
+  .forgot-title {
+    font-size: 32px;
+    margin-left: 11.9%;
+  }
+  .forgot-form {
+    max-width: 99%!important;
+    margin-top: -28%;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    padding: 0.7em;
+    width: 105%;
+    padding: 1.1em 2.5em 1.1em 0.9em;
+  }
+    .forgot-label {
+    margin-left: 2%;
+  }
+  .forgot-password-wrapper {
+    width: 105%;
+  }
+  .forgot-submit {
+    font-size: 1.1rem;
+    width: 105%!important;
+    padding: 4%;
+  }
+  .forgot-footer {
+    margin-left:4.2%;
+    font-size: 1.5rem;;
+  }
+    .forgot-signin-link {
+    font-size: 1.3rem;
+    margin-left: -2%;
+    margin: 1px;
+    margin-top: 0.7%;
+    text-decoration: none;
+  }
+}
+
+
+@media (min-width: 412px) and (max-width: 412.98px) and (min-height: 914px) and (max-height: 914.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-image {
+    width: 102%;
+    height: 50vh!important;
+  }
+
+
+  .forgot-advert-orange {
+    font-size: 1.6rem!important;
+  }
+  .forgot-form {
+    max-width: 100%!important;
+  }
+  .forgot-title {
+    font-size: 35px!important;
+    margin-left: 14%;
+    margin-top: -28%;
+  }
+  .forgot-input {
+    width: 104.5%!important;
+    padding: 1em 2em 1em 0.8em!important;
+    font-size: 1.1rem;
+    border: 2px solid #222;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.2s;
+  }
+  .forgot-submit {
+    width: 105%;
+    padding: 2.5%;
+  }
+
+
+}
+@media (width: 412px) and (min-height: 915px) and (max-height: 915.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-image {
+    width: 102%;
+    height: 50vh!important;
+  }
+  .forgot-advert-green {
+    font-size: 2.5rem!important;
+  }
+  .forgot-signin-link {
+    font-size: 1.3rem;
+    margin-left: -2%;
+    margin: 1px;
+  }
+  .forgot-advert-orange {
+    font-size: 1.9rem;
+  }
+  .forgot-form {
+    margin-top: -35%;
+    max-width: 100%!important;
+  }
+  .forgot-title {
+    font-size: 28px;
+    margin-left: 10%;
+  }
+  .forgot-input {
+    width: 104.5%!important;
+    padding: 1em 2em 1em 0.8em!important;
+    font-size: 1.1rem;
+    border: 2px solid #222;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.2s;
+  }
+  .forgot-submit {
+    width: 105%;
+    padding: 2.5%;
+  }
+
+  .forgot-footer {
+    margin-top: 10px!important;
+    margin-left: 7px;
+    font-size: 1.5rem;
+  }
+  .forgot-password-wrapper {
+    width: 104%!important;
+  }
+}
+
+@media (min-width: 390px) and (max-width: 390.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-advert-green {
+    font-size: 1.9rem!important;
+  }
+  .forgot-advert-orange {
+    font-size: 1.5rem!important;
+  }
+  .forgot-title{
+
+    margin-left: 7%;
+  }
+    .forgot-input {
+
+    padding: 0.9em 2.5em 0.9em 0.9em!important;
+  }
+}
+
+
+@media (min-width: 375px) and (max-width: 375.98px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-advert-green {
+    font-size: 1.8rem!important;
+  }
+  .forgot-advert-orange {
+    font-size: 1.4rem!important;
+  }
+  .forgot-title {
+    font-size: 26px;
+  }
+  .forgot-input {
+    width: 87%;
+    padding: 0.5em 2.5em 0.5em 0.9em;
+    font-size: 1.1rem;
+    border: 2px solid #222;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.2s;
+  }
+  .forgot-input-group {
+    gap: 0px;
+  }
+  .forgot-submit {
+    font-size: 1.1rem;
+    width: 105%;
+  }
+  .forgot-password-wrapper {
+    width: 105%;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .forgot-input::placeholder {
+    font-size: 0.9rem;
+  }
+  .forgot-label {
+    margin-left: 2%;
+  }
+}
+
+
+@media (min-width: 360px) and (max-width: 361px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-advert-green {
+    font-size: 1.4rem!important;
+    margin-top: 22%;
+  }
+  .forgot-image {
+    width: 102%;
+    height: 50vh!important;
+  }
+  .forgot-advert-orange {
+    font-size: 1.4rem!important;
+    margin-top: -1%;
+  }
+  .forgot-title {
+    font-size: 26px;
+    margin-left: 4%;
+  }
+  .forgot-input {
+    width: 106%!important;
+    padding: 0.9em 2.5em 0.9em 0.9em!important;
+    font-size: 1.1rem;
+    border: 2px solid #222;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.2s;
+  }
+  .forgot-submit {
+    font-size: 1.5rem;
+    width: 106.2%!important;
+    padding: 3.6%!important;
+  }
+  .forgot-password-wrapper {
+    width: 106.5%!important;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .forgot-input::placeholder {
+    font-size: 0.9rem;
+  }
+}
+
+
+@media (width: 344px){
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-advert-green {
+   font-size: 0.5rem!important;
+  }
+    .forgot-input::placeholder {
+    font-size: 1.2rem!important;
+  }
+  .forgot-footer {
+    margin-top: 10px!important;
+    margin-left: 2%;
+    font-size:1.2rem!important;
+  }
+  .forgot-advert-orange {
+    font-size: 1rem!important;
+  }
+  .forgot-title {
+    font-size: 40px!important;
+    margin-left: 1%;
+  }
+  .forgot-input {
+    width: 106%!important;
+    padding: 0.9em 2em 0.9em 0.9em!important;
+  }
+  .forgot-signin-link {
+    font-size: 1.1rem;
+  }
+  .forgot-submit {
+    font-size: 1.3rem;
+    width: 106%;
+    padding: 3%;
+  }
+  .forgot-password-wrapper {
+    width: 106%;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .forgot-label {
+    margin-left: 2%;
+    font-size: 1.5rem;
+
+  }
+}
+
+
+@media (max-width: 1023px) {
+  .forgot-root {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  .forgot-image-side {
+    height: 50vh;
+  }
+  .forgot-image {
+    height: 100%;
+    object-position: center;
+  }
+  .forgot-title {
+    font-size: 40px;
+  }
+  .forgot-advert-green {
+    font-size: 3rem;
+  }
+  .forgot-advert-orange {
+    font-size: 2rem;
+  }
+  .forgot-form {
+    max-width: 90%;
+  }
+  .forgot-submit {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+
+
+@media (max-width: 414px) {
+  .forgot-root {
+    overflow-x: hidden;
+  }
+  .forgot-advert-green {
+    font-size: 1.8rem!important;
+    margin-top: 20%;
+  }
+  .forgot-form {
+    min-width: 99%!important;
+  }
+  .forgot-advert-orange {
+    font-size: 1.6rem!important;
+    margin-top: -2%;
+  }
+  .forgot-title {
+    font-size: 39px;
+    margin-left: 7%;
+  }
+  .forgot-submit {
+    width: 105%;
+    padding: 3.5%;
+  }
+  .forgot-image{
+    height: 50vh;
+  }
+  .forgot-input {
+    font-size: 1rem;
+    padding: 0.9em;
+    width: 105.5%;
+  }
+  .forgot-input-group {
+    gap: 0px;
+  }
+    .forgot-signin-link {
+    font-size: 1.2rem;
+    text-decoration: none;
+    margin-top: 0.8%;
+  }
+  .forgot-password-wrapper {
+    width: 105.7%;
+  }
+  .forgot-label {
+    margin-left: 2%;
+  }
+  .forgot-footer {
+    margin-left:5%;
+    font-size: 1.3rem;
+  }
+  .forgot-input::placeholder {
+    font-size: 1.1rem;
+  }
+}
+
+
