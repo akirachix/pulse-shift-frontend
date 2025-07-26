@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import DashboardLayout from './sharedcomponent/Layout';
 import SignIn from './SignIn';
-import ProfileViewScreen from './profile';
+import ProfileViewScreen from './Profile';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import ResetNotification from './ResetNotification';
@@ -33,7 +33,7 @@ function App() {
     <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <Routes>
         <Route element={<DashboardLayout />}>
-          <Route path="/profile" element={<ProfileViewScreen />} />
+          <Route path="/Profile" element={<ProfileViewScreen />} />
            <Route path="/orders" element={<Orders onSelectMamaMboga={handleSelectMamaMboga} />} />
           <Route path="*" element={<ComingSoon />} />
           <Route path="/sales" element={<SalesDashboard/>} />

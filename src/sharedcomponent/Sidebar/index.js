@@ -18,8 +18,7 @@ const navLinks = [
   { label: "Products", icon: faCartShopping, to: "/products" },
   { label: "Orders", icon: faFileAlt, to: "/orders" },
   { label: "Sales", icon: faChartBar, to: "/sales" },
-   { label: "Users", icon: faUser, to: "/profile" },
-  
+  { label: "Users", icon: faUser, to: "/profile" },
 ];
 
 const bottomLinks = [

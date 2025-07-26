@@ -15,7 +15,7 @@ jest.mock("../hooks/fetch", () => ({
   default: jest.fn(),
 }));
 
-import useFetchUserData from "../hooks/fetch";
+import useFetchUserData from "../hooks/useGetUsers";
 
 describe("Dashboard Component", () => {
   beforeEach(() => {

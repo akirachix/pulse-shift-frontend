@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
-import useFetchUserData from "../hooks/fetch";
+import useFetchUserData from "../hooks/useGetUsers";
 import "./index.css";
 
 const Modal = ({ isOpen, onClose, children }) => {
