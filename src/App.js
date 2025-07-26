@@ -21,7 +21,6 @@ function App() {
       <Routes>
         <Route element={<DashboardLayout />}>
           <Route path="orders" element={<Orders />} />
-          <Route path="*" element={<ComingSoon />} />
           <Route path="/sales" element={<Sales />} />
           <Route path="/" element={<AdminDashboard />} />
           <Route path="*" element={<ComingSoon />} />
