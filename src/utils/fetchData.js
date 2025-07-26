@@ -1,14 +1,9 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 async function fetchData(endpoint) {
-    // const token = localStorage.getItem('token'); 
-    // if (!token) {
-    //     throw new Error('No auth token found. Please login.');
-    // }
 
     const defaultHeaders = {
         'Content-Type': 'application/json',
-        // 'Authorization': `Token ${token}`,
     };
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {

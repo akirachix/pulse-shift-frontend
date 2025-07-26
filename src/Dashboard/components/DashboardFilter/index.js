@@ -2,7 +2,6 @@ import React from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CustomDropdownFilter from '../../../shared-components/Filter';
-import '../../index.css'
 
 const FILTER_OPTIONS = [
     { value: "day", label: "Day" },

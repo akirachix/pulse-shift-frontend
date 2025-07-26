@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../index.css'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const COLORS = ["#FFBB28", "#00C321", "#FF6042"];

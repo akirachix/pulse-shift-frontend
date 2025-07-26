@@ -3,6 +3,7 @@
     padding: 2rem;
     font-family: Arial, sans-serif;
     background: #f9f9f9;
+    height: max-content !important;
 }
 
 h1 {

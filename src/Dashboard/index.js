@@ -6,7 +6,6 @@ import { useMamambogas } from "../hooks/useMamaMboga";
 import { useEffect, useMemo, useState } from "react";
 import { filterByDateRange, filterByDay, filterByMonth, filterByWeek } from "../utils/filterUtils";
 import { computeCustomerInsights, computeGrossSales, computeOrdersOverTime, computeOrderStatusData, computeTopVendors } from "../utils/computeUtils";
-import DashboardFilter from "./components/DashboardFilter";
 import UserProfile from "./components/Profile";
 import DashboardCards from "./components/DashboardCards";
 import { TopVendorsChart } from "./components/TopVendorsChart";
@@ -14,6 +13,8 @@ import { OrderStatusPieChart } from "./components/OrderStatusPieChart";
 import { CustomerInsightsPieChart } from "./components/CustomerInsightsPieChart";
 import RecentOrdersTable from "./components/RecentOrdersTable";
 import { OrdersOverTimeChart } from "./components/OrdersOverTimeChart";
+import DashboardFilter from "./components/DashboardFilter";
+import "./index.css"
 
 export default function AdminDashboard() {
   const [filterType, setFilterType] = useState("week");
@@ -123,7 +124,6 @@ export default function AdminDashboard() {
     allErrors,
   ]);
 
-  // Map customer id to name/email for search
   const customerMap = useMemo(() => {
     if (!customers) return {};
     return customers.reduce((acc, cust) => {
@@ -132,7 +132,6 @@ export default function AdminDashboard() {
     }, {});
   }, [customers]);
 
-  // Search in filtered orders
   const filteredOrders = dashboardData.recentOrders.filter((order) => {
     const customerName = customerMap[order.customer] || "";
     const status = order.current_status || "";
@@ -180,7 +179,7 @@ export default function AdminDashboard() {
       <div className="dashboard-section">
         <h3>Recent Orders</h3>
         <div className="search-container">
-          <label htmlFor="search">Search Orders:</label>
+          <label htmlFor="search">Search Orders</label>
           <input
             id="search"
             type="text"

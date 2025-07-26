@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../index.css'
 
 const numberWithCommas = (n) => n?.toLocaleString() || "0";
 

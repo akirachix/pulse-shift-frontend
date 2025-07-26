@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../index.css'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 export function OrdersOverTimeChart({ data }) {

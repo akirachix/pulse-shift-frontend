@@ -1,6 +1,6 @@
-import { useState } from 'react';
+
+import { useState } from "react";
 import { formatDate } from "../../../utils/dateUtils";
-import '../../index.css'
 
 const numberWithCommas = (n) => n?.toLocaleString() || "0";
 
@@ -57,7 +57,6 @@ export default function RecentOrdersTable({ orders, customerMap }) {
                 </table>
             </div>
 
-            {/* Pagination Controls */}
             {totalPages > 1 && (
                 <div
                     style={{
