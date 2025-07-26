@@ -2,38 +2,27 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AdminDashboard from ".";
+import { useOrders } from "../hooks/useFetchOrders";
+import { useOrdersDetails } from "../hooks/useFetchOrderDetails";
+import { usePayments } from "../hooks/usePayments";
+import { useMamambogas } from "../hooks/useMamaMboga";
+import { useCustomers } from "../hooks/useCustomers";
 
-
-const actualUseFetchOrders = jest.requireActual("../hooks/useFetchOrders");
-
-let mockUseOrdersFn = jest.fn();
 
 jest.mock("../hooks/useFetchOrders", () => ({
-    ...actualUseFetchOrders,
-    useOrders: () => mockUseOrdersFn(),
-}));
-
-// --- 1. MOCK HOOKS ---
-const mockUseOrders = jest.fn();
-const mockUseOrdersDetails = jest.fn();
-const mockUsePayments = jest.fn();
-const mockUseCustomers = jest.fn();
-const mockUseMamaMbogas = jest.fn();
-
-jest.mock("../hooks/useFetchOrders", () => ({
-    useOrders: mockUseOrders,
+    useOrders: jest.fn(),
 }));
 jest.mock("../hooks/useFetchOrderDetails", () => ({
-    useOrdersDetails: mockUseOrdersDetails,
+    useOrdersDetails: jest.fn(),
 }));
 jest.mock("../hooks/usePayments", () => ({
-    usePayments: mockUsePayments,
+    usePayments: jest.fn(),
 }));
 jest.mock("../hooks/useCustomers", () => ({
-    useCustomers: mockUseCustomers,
+    useCustomers: jest.fn(),
 }));
 jest.mock("../hooks/useMamaMboga", () => ({
-    useMamaMbogas: mockUseMamaMbogas,
+    useMamambogas: jest.fn(),
 }));
 
 jest.mock("../utils/filterUtils", () => ({
@@ -64,7 +53,6 @@ jest.mock("../utils/computeUtils", () => ({
     ]),
 }));
 
-// --- 2. MOCK CHILD COMPONENTS ---
 jest.mock("./components/DashboardFilter", () => (props) => (
     <div data-testid="dashboard-filter">
         <button data-testid="filter-week" onClick={() => props.setFilterType("week")}>Week</button>
@@ -99,10 +87,9 @@ jest.mock("./components/OrdersOverTimeChart", () => ({ data }) => (
     </div>
 ));
 
-// --- 3. TEST CASES ---
 describe("AdminDashboard", () => {
     beforeEach(() => {
-        mockUseOrders.mockImplementation(() => ({
+        useOrders.mockImplementation(() => ({
             orders: [
                 { order_id: "o1", order_date: "2025-07-24", customer: "c1", current_status: "Processing", payment_status: "Paid", total_amount: "1000" },
                 { order_id: "o2", order_date: "2025-07-23", customer: "c2", current_status: "Delivered", payment_status: "Paid", total_amount: "2300" }
@@ -110,7 +97,7 @@ describe("AdminDashboard", () => {
             loading: false,
             error: null
         }));
-        mockUseOrdersDetails.mockImplementation(() => ({
+        useOrdersDetails.mockImplementation(() => ({
             orders_items: [
                 { order: "o1", vendor: "v1", item: "Item A" },
                 { order: "o2", vendor: "v2", item: "Item B" }
@@ -118,7 +105,7 @@ describe("AdminDashboard", () => {
             loading: false,
             error: null
         }));
-        mockUsePayments.mockImplementation(() => ({
+        usePayments.mockImplementation(() => ({
             payments: [
                 { order: "o1", amount: 1000 },
                 { order: "o2", amount: 2300 }
@@ -126,7 +113,7 @@ describe("AdminDashboard", () => {
             loading: false,
             error: null
         }));
-        mockUseCustomers.mockImplementation(() => ({
+        useCustomers.mockImplementation(() => ({
             customers: [
                 { id: "c1", first_name: "Alice", email: "alice@example.com" },
                 { id: "c2", first_name: "Bob", email: "bob@example.com" }
@@ -134,7 +121,7 @@ describe("AdminDashboard", () => {
             loading: false,
             error: null
         }));
-        mockUseMamaMbogas.mockImplementation(() => ({
+        useMamambogas.mockImplementation(() => ({
             mamambogas: [
                 { id: "v1", name: "Vendor A" },
                 { id: "v2", name: "Vendor B" }
@@ -200,7 +187,7 @@ describe("AdminDashboard", () => {
     });
 
     it("shows error if any hook returns an error", () => {
-        mockUseOrders.mockImplementationOnce(() => ({
+        useOrders.mockImplementationOnce(() => ({
             orders: [],
             loading: false,
             error: "Failed to fetch orders"
@@ -210,7 +197,7 @@ describe("AdminDashboard", () => {
     });
 
     it("shows loading overlay when loading", () => {
-        mockUseOrders.mockImplementationOnce(() => ({
+        useOrders.mockImplementationOnce(() => ({
             orders: [],
             loading: true,
             error: null
