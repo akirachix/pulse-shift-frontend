@@ -89,9 +89,6 @@ const Orders = ({ onSelectMamaMboga }) => {
     alert(`Payment details for Order ID: ${orderId}`);
   };
 
-  console.log("Orders:", orders);
-  console.log("Filter:", filter);
-  console.log("Filtered Orders:", filteredOrders);
   console.log(
     "Unique Statuses:",
     [...new Set(orders.map(order => order.current_status))].filter(Boolean)
@@ -181,14 +178,14 @@ const Orders = ({ onSelectMamaMboga }) => {
                         className="payment-btn refund"
                         onClick={() => alert(`Order ID ${order.order_id} is refunded/canceled.`)}
                       >
-                        refund
+                        Refund
                       </button>
                     ) : (
                       <button
                         className="payment-btn"
                         onClick={() => handlePaymentClick(order.order_id)}
                       >
-                        {order.payment_status || "Unknown"}
+                        {order.payment_status}
                       </button>
                     )}
                   </td>
