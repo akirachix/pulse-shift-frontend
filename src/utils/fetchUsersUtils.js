@@ -1,4 +1,3 @@
-// utils/fetchUsersUtils.js
 
 export async function fetchUsers() {
   const apiBaseUrl = process.env.REACT_APP_USERS_API_BASE_URL || "https://greensmtaani-d6ee50db917a.herokuapp.com";
