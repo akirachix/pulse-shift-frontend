@@ -92,4 +92,19 @@ describe('SalesDashboard', () => {
 
     fireEvent.click(weeklyBtn);
   });
+
+  test('renders correctly when no sales data is available', () => {
+    useSalesData.mockReturnValue({
+      loading: false,
+      error: null,
+      salesData: [],
+      popularProducts: [],
+      totalSales: 0,
+    });
+    render(<SalesDashboard />);
+    expect(screen.getByRole('heading', { name: /sales report/i })).toBeInTheDocument();
+    expect(screen.getByText(/kes 0/i)).toBeInTheDocument();
+    expect(screen.getByTestId('bar-chart')).toHaveTextContent('[]');
+    expect(screen.getByTestId('pie-chart')).toHaveTextContent('[]');
+  });
 });
