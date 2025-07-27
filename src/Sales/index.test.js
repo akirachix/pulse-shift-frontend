@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SalesDashboard from './'; 
+import { useSalesData } from '../hooks/useSalesData';
 jest.mock('../hooks/useSalesData', () => ({
   useSalesData: jest.fn(),
 }));
@@ -13,7 +14,6 @@ jest.mock('./components/PieChart', () => (props) => (
   <div data-testid="pie-chart">PieChart: {JSON.stringify(props.data)}</div>
 ));
 
-import { useSalesData } from '../hooks/useSalesData';
 
 describe('SalesDashboard', () => {
   const months = [

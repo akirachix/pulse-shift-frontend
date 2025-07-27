@@ -11,3 +11,15 @@ export const fetchOrders = async () => {
     throw new Error(`Error fetching orders: ${error.message}`);
   }
 };
+
+export async function fetchData(endpoint) {
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
