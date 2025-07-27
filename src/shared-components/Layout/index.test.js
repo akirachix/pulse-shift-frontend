@@ -1,8 +1,6 @@
-
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import DashboardLayout from './index';                                 
-
+import DashboardLayout from ".";
 
 
 jest.mock("../Sidebar", () => ({
