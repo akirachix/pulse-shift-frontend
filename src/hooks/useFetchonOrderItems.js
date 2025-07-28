@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { fetchData } from "../utils/fetchonOrders";
+import { fetchData } from "../utils/fetchOrders";
 
 export function useFetchOrderItems() {
   const [orderItems, setOrderItems] = useState([]);
