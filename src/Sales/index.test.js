@@ -14,7 +14,6 @@ jest.mock('./components/PieChart', () => (props) => (
   <div data-testid="pie-chart">PieChart: {JSON.stringify(props.data)}</div>
 ));
 
-
 describe('SalesDashboard', () => {
   const months = [
     { value: 1, name: 'January' },

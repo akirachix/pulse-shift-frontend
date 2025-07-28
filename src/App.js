@@ -3,8 +3,6 @@ import React from 'react';
 import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-// import DashboardLayout from "./components/Layout";7
-// import ComingSoon from "./pages/404";
 import Orders from "./Orders"; 
 import DashboardLayout from './sharedcomponent/Layout';
 import Sales from './Sales/';
@@ -15,7 +13,6 @@ import ResetPassword from "./ResetPassword";
 import ResetNotification from "./ResetNotification";
 import Verify from "./Verify";
 
-// import Sales from './Sales/';
 
 
 function App() {

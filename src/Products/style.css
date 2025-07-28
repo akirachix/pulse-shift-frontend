@@ -1,8 +1,12 @@
 .products-page-container {
   padding: 20px 30px;
+  margin-top: 35px;
+  margin-left: -10px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: #f4f7f6;
   min-height: 100vh;
+}
+.products-data-table td[data-label="Product Name"] {
+  text-transform: none !important;
 }
 
 .products-page-container.error-state {
@@ -20,11 +24,14 @@
   border-radius: 4px;
 }
 
-.products-page-container h1 {
-  color: green;
-  margin-bottom: 25px;
-  text-align: center;
-  font-size: 2.3em;
+.products-page-container h2 {
+  color: #00a216;
+  margin-bottom: -1px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  margin-top: 15px;
+  margin-left: 2px;
+  font-size: 35px;
 }
 
 .loading-spinner-container {
@@ -56,7 +63,6 @@
 }
 
 .error-message-container {
-  background-color: #ffebee;
   color: #c62828;
   padding: 15px 20px;
   border-radius: 5px;
@@ -79,8 +85,8 @@
 
 .pagination-controls {
   position: fixed;
-  bottom: 10px;
-  left: 50%;
+  bottom: 130px;
+  left: 56.5%;
   transform: translateX(-50%);
   background: white;
   padding: 8px 16px;
@@ -94,22 +100,25 @@
 }
 
 .pagination-button {
+  padding: 6px 14px;
+  background-color: #22a734;
+  color: white;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 6px 12px;
-  font-weight: 600;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-  transition: background-color 0.2s ease;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400; 
+  transition: background-color 0.2s;
 }
 
 .pagination-button:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  background-color: #c5c3c3;
+ 
 }
 
 .pagination-button:not(:disabled):hover {
-  background-color: #e2e2e2;
+  background-color: rgb(49, 131, 49);
 }
 
 
@@ -127,17 +136,20 @@
 
 .search-input-wrapper {
   position: relative;
-  display: inline-block;
   width: 40%;
+  margin-bottom: -2px;
+  margin-left: -19px;
   min-width: 220px;
 }
 
 .filter-input-field {
   width: 125%;
-  padding: 15px 16px 15px 2.2rem;
+  margin-top: 2px;
+  padding: 10px 10px 10px 2.2rem;
   border: 1px solid #acafb3;
-  border-radius: 16px;
-  font-size: 1.3em;
+  border-radius: 8px;
+  margin-bottom: -4px;
+  font-size: 1.1em;
   box-sizing: border-box;
 }
 .filter-select-field:focus {
@@ -158,8 +170,8 @@
 
 .search-icon-inside-input {
   position: absolute;
-  left: 12px;
-  top: 50%;
+  left: 10px;
+  top: 62%;
   transform: translateY(-50%);
   color: #888;
   font-size: 1.2rem;
@@ -167,10 +179,11 @@
 }
 
 .filter-select-field {
-  padding: 15px 15px;
+  padding: 10px 15px;
   border: 1px solid #acafb3;
-  border-radius: 16px;
-  font-size: 1.3em;
+  border-radius: 8px;
+  margin-bottom: -8px;
+  font-size: 1.2em;
   margin-left: 10%;
   box-sizing: border-box;
   cursor: pointer;
@@ -192,11 +205,12 @@
 }
 
 .filter-reset-action {
-  padding: 10px 18px;
+  padding: 12px 18px;
   background-color: #08b916;
   color: white;
   border: none;
   font-size: 15px;
+  margin-bottom: -7px;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -205,8 +219,6 @@
 
 .product-table-layout {
   overflow-x: auto;
-  background-color: #ffffff;
-  border-radius: 18px;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.09);
 }
 
@@ -223,25 +235,16 @@
 }
 
 .products-data-table th {
-  background-color: #f0f4f7;
-  color: rgb(107, 104, 104);
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 1.1em;
+  background-color: #e6e3e3;
+  color:black;
+  font-weight: 500;
+  font-size: 1em;
   letter-spacing: 0.9px;
 }
-
-.products-data-table tbody tr:nth-child(even) {
-  background-color: #eef1f3;
-}
-
-.products-data-table tbody tr:nth-child(odd) {
-  background-color: #f0f1f1;
-}
-
 .product-table-row td {
   color: #010408;
-  font-size: 1.2em;
+  font-size: 1em;
+  font-weight: 300;
 }
 
 .table-action-button {

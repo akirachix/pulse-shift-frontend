@@ -60,7 +60,7 @@ const ProductsPage = () => {
   const [page, setPage] = useState(1);
 
   const handleFilterChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -164,7 +164,7 @@ const ProductsPage = () => {
 
   return (
     <div className="products-page-container">
-      <h1>Product Lists For All Mama Mboga's</h1>
+      <h2>Product Lists For All Mama Mboga's</h2>
 
       <div className="filters-section">
         <div className="search-input-wrapper">
