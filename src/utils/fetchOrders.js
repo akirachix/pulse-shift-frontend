@@ -12,3 +12,4 @@ export async function fetchData(endpoint) {
     throw error;
   }
 }
+
