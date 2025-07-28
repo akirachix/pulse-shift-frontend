@@ -18,10 +18,8 @@ export default function useFetchUserData() {
 
       try {
         const fetchedUsers = await fetchUsers();
-        console.log("Fetched Users (Raw):", JSON.stringify(fetchedUsers, null, 2));
         setUsers(fetchedUsers);
       } catch (err) {
-        console.log("Fetch Error:", err.message);
         setError(err.message || "Failed to load users");
       } finally {
         setLoading(false);

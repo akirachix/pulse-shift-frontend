@@ -3,6 +3,7 @@ import BarChart from './components/BarChart';
 import PieChart from './components/PieChart';
 import { getSalesData, getPopularProducts } from './components/SalesData';
 import './style.css';
+
 const SalesDashboard = () => {
   const [timeRange, setTimeRange] = useState('month');
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
