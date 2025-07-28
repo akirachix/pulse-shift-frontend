@@ -1,22 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
+import Modal from '../UserModal/usercomponents/modal';
 import useFetchUserData from "../hooks/useGetUsers";
 import "./index.css";
-
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close-btn" onClick={onClose}>
-          ×
-        </button>
-        {children}
-      </div>
-    </div>
-  );
-};
 
 function formatDate(isoString) {
   if (!isoString) return "--";
@@ -40,35 +26,19 @@ const Dashboard = () => {
   if (error && error.includes("No authentication token found")) {
     navigate("/signin");
   }
-
   const mappedUsers = users
-    .map((user) => {
-      if (user.user_type === "customer") {
-        return {
-          id: user.id,
-          name: `${user.first_name} ${user.last_name}`,
-          mobile: user.phone_number,
-          role: "Customer",
-          is_active: user.is_active,
-          registration_date: user.registration_date,
-          email: user.email,
-          user_data: user,
-        };
-      } else if (user.user_type === "mama_mboga") {
-        return {
-          id: user.id,
-          name: `${user.first_name} ${user.last_name}`,
-          mobile: user.phone_number,
-          role: "Vendor",
-          is_active: user.is_active,
-          registration_date: user.registration_date,
-          email: user.email,
-          user_data: user,
-        };
-      }
-      return null;
-    })
-    .filter(Boolean);
+  .map(user => ({
+    id: user.id,
+    name: `${user.first_name} ${user.last_name}`,
+    mobile: user.phone_number,
+    role: user.user_type === "customer" ? "Customer" : "Vendor",
+    is_active: user.is_active,
+    registration_date: user.registration_date,
+    email: user.email,
+    user_data: user,
+  }))
+  .filter(user => user.role === "Customer" || user.role === "Vendor");
+
 
   const filteredUsers = mappedUsers.filter(
     (user) =>
