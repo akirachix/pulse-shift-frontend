@@ -89,11 +89,6 @@ const Orders = ({ onSelectMamaMboga }) => {
     alert(`Payment details for Order ID: ${orderId}`);
   };
 
-  console.log(
-    "Unique Statuses:",
-    [...new Set(orders.map(order => order.current_status))].filter(Boolean)
-  );
-
   return (
     <div className="orders-page">
       <h2>Mama Mboga Orders Overview</h2>
