@@ -112,3 +112,96 @@ describe("SignIn Component", () => {
     expect(checkbox).not.toBeChecked();
   });
 });
+
+  test("does not submit form if password is less than 6 characters and shows aria-invalid", async () => {
+    const user = userEvent.setup();
+
+    const usernameInput = screen.getByLabelText(/Username/i);
+    const passwordInput = screen.getByLabelText(/Password/i, { selector: "input" });
+    const submitButton = screen.getByRole("button", { name: /Sign In/i });
+
+    await user.type(usernameInput, "user");
+    await user.type(passwordInput, "123"); 
+
+    expect(submitButton).toBeDisabled();
+
+    await user.click(submitButton);
+
+    expect(mockSignin).not.toHaveBeenCalled();
+    expect(passwordInput).toHaveAttribute("aria-invalid", "true");
+  });
+
+  test("disables submit button and shows loading text when loading is true", () => {
+    useUserSignin.mockReturnValue({
+      signin: mockSignin,
+      error: null,
+      loading: true,
+      success: false,
+    });
+
+    render(
+      <MemoryRouter>
+        <SignIn onLoginSuccess={mockOnLoginSuccess} />
+      </MemoryRouter>
+    );
+
+    const submitButton = screen.getByRole("button", { name: /Signing In.../i });
+    expect(submitButton).toBeDisabled();
+  });
+
+  test("displays error message when error exists", () => {
+    useUserSignin.mockReturnValue({
+      signin: mockSignin,
+      error: "Invalid credentials",
+      loading: false,
+      success: false,
+    });
+
+    render(
+      <MemoryRouter>
+        <SignIn onLoginSuccess={mockOnLoginSuccess} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/Invalid credentials/i)).toBeInTheDocument();
+  });
+
+  test("calls onLoginSuccess callback when success is true", async () => {
+    const user = userEvent.setup();
+
+    const mockSigninResolved = jest.fn().mockResolvedValue({ token: "dummy-token" });
+
+    useUserSignin.mockReturnValue({
+      signin: mockSigninResolved,
+      error: null,
+      loading: false,
+      success: true,
+    });
+
+    render(
+      <MemoryRouter>
+        <SignIn onLoginSuccess={mockOnLoginSuccess} />
+      </MemoryRouter>
+    );
+
+    const usernameInput = screen.getByLabelText(/Username/i);
+    const passwordInput = screen.getByLabelText(/Password/i, { selector: "input" });
+    const submitButton = screen.getByRole("button", { name: /Sign In/i });
+
+    await user.type(usernameInput, "user");
+    await user.type(passwordInput, "password123");
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockSigninResolved).toHaveBeenCalledWith("user", "password123");
+    });
+    
+    expect(screen.getByText(/Sign in successful!/i)).toBeInTheDocument();
+    expect(mockOnLoginSuccess).toHaveBeenCalled();
+  });
+
+  test("input fields have correct maxLength attributes", () => {
+    expect(screen.getByLabelText(/Username/i)).toHaveAttribute("maxLength", "254");
+    expect(screen.getByLabelText(/Password/i, { selector: "input" })).toHaveAttribute("maxLength", "32");
+  });
+

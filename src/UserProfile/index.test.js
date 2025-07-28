@@ -100,20 +100,31 @@ describe("Dashboard Component", () => {
     });
     render(<Dashboard />);
 
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    expect(screen.getByText(/Jane Smith/i)).toBeInTheDocument();
+    expect(screen.getByText(/Fiona Wesonga/i)).toBeInTheDocument();
+    expect(screen.getByText(/Jabal Simiyu/i)).toBeInTheDocument();
 
     fireEvent.change(screen.getByPlaceholderText(/Search by Name or Number/i), {
       target: { value: "Jane" },
     });
-    expect(screen.queryByText(/John Doe/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/Jane Smith/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Fiona Wesonga/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Jabal Simiyu/i)).toBeInTheDocument();
 
     fireEvent.change(screen.getByPlaceholderText(/Search by Name or Number/i), {
       target: { value: "123456" },
     });
 
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Jane Smith/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Fiona Wesonga/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Jabal Simiyu/i)).not.toBeInTheDocument();
   });
 });
+
+test("renders 'No users found.' message when users array is empty", () => {
+  useFetchUserData.mockReturnValue({
+    users: [],
+    loading: false,
+    error: null,
+  });
+  render(<Dashboard />);
+  expect(screen.getByText(/No users found./i)).toBeInTheDocument();
+});
+

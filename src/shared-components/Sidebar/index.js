@@ -9,7 +9,6 @@ import {
   faChartBar,
   faCog,
   faSignOut,
-  
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 
@@ -18,7 +17,8 @@ const navLinks = [
   { label: "Products", icon: faCartShopping, to: "/products" },
   { label: "Orders", icon: faFileAlt, to: "/orders" },
   { label: "Sales", icon: faChartBar, to: "/sales" },
-  { label: "Users", icon: faUser, to: "/profile" },
+  { label: "Users", icon: faUser, to: "/users" },
+
 ];
 
 const bottomLinks = [
@@ -41,7 +41,7 @@ export function Sidebar() {
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                aria-label={item.label} 
+                aria-label={item.label}
                 className={({ isActive }) =>
                   isActive ? "active sidebar-link" : "sidebar-link"
                 }
@@ -50,7 +50,10 @@ export function Sidebar() {
                 {({ isActive }) => (
                   <>
                     {isActive && <div className="sidebar-pill"></div>}
-                    <FontAwesomeIcon icon={item.icon} className="sidebar-icon" />
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="sidebar-icon"
+                    />
                     <span>{item.label}</span>
                   </>
                 )}
@@ -65,7 +68,7 @@ export function Sidebar() {
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                aria-label={item.label} 
+                aria-label={item.label}
                 className={({ isActive }) =>
                   isActive ? "active sidebar-link" : "sidebar-link"
                 }
@@ -74,7 +77,10 @@ export function Sidebar() {
                 {({ isActive }) => (
                   <>
                     {isActive && <div className="sidebar-pill"></div>}
-                    <FontAwesomeIcon icon={item.icon} className="sidebar-icon" />
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="sidebar-icon"
+                    />
                     <span>{item.label}</span>
                   </>
                 )}

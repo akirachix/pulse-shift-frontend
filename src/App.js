@@ -4,7 +4,7 @@ import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import DashboardLayout from './sharedcomponent/Layout';
+import DashboardLayout from './shared-components/Layout';
 import SignIn from './SignIn';
 import ProfileViewScreen from './UserProfile';
 import ForgotPassword from './ForgotPassword';

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
-import Modal from '../UserModal/usercomponents/modal';
+import Modal from './components/UserModal';
 import useFetchUserData from "../hooks/useGetUsers";
 import "./index.css";
 
