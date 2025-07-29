@@ -3,20 +3,20 @@ import useProducts from '../hooks/useProducts';
 import useUsers from '../hooks/useUsersData';
 import useCategories from '../hooks/useCategories';
 import useStockRecords from '../hooks/useStockRecords';
-
 import './style.css';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRefresh, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const LoadingSpinner = () => (
-  <div className="loading-spinner-container">
+  <div className="loading-spinner-container" role="status" aria-live="polite" aria-busy="true">
     <div className="loading-spinner-element"></div>
     <p>Loading data...</p>
   </div>
 );
 
 const ErrorMessageDisplay = ({ message }) => (
-  <div className="error-message-container">
+  <div role="alert" className="error-message-container" style={{ color: 'red' }}>
     <p>Error: {message}</p>
   </div>
 );
@@ -52,52 +52,48 @@ const ProductsPage = () => {
     refetch: refetchStockRecords,
   } = useStockRecords();
 
-  const [filters, setFilters] = useState({
-    searchTerm: '',
-    categoryId: '',
-  });
-
+  const [filters, setFilters] = useState({ searchTerm: '', categoryId: '' });
   const [page, setPage] = useState(1);
 
   const handleFilterChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const vendors = useMemo(() => {
-    if (!users) return [];
-    return users.filter((user) => user.user_type === 'mama_mboga');
-  }, [users]);
+  useEffect(() => {
+    setPage(1);
+  }, [filters]);
 
+  const vendors = useMemo(() => {
+    return (users ?? []).filter((u) => u.user_type === 'mama_mboga');
+  }, [users]);
   const categoryMap = useMemo(() => {
-    if (!categories) return new Map();
-    return new Map(categories.map((c) => [String(c.category_id), c.category_name]));
+    return new Map((categories ?? []).map((c) => [String(c.category_id), c.category_name]));
   }, [categories]);
 
   const enrichedProducts = useMemo(() => {
-    if (!stockRecords || !products || !vendors || !categories) return [];
-
-    const productMap = new Map(products.map((p) => [String(p.product_id), p]));
+    const productMap = new Map((products ?? []).map((p) => [String(p.product_id), p]));
     const vendorMap = new Map(vendors.map((v) => [String(v.id), v]));
+    const searchLower = (filters.searchTerm ?? '').toLowerCase();
 
-    const searchLower = filters.searchTerm.toLowerCase();
-
-    return stockRecords
+    return (stockRecords ?? [])
       .map((stock) => {
         const product = productMap.get(String(stock.product));
         const vendor = vendorMap.get(String(stock.mama_mboga));
+
         if (!product || !vendor) return null;
 
-        const categoryName = categoryMap.get(String(product.category)) || 'Unknown';
+        const categoryName = categoryMap.get(String(product.category)) ?? 'Unknown';
+
         const vendorName = `${vendor.first_name ?? ''} ${vendor.last_name ?? ''}`.trim() || `Vendor ${vendor.id}`;
 
         return {
           listingId: stock.inventory_id,
           productId: product.product_id,
           productName: product.name,
-          imageUrl: product.image_url || null,
+          imageUrl: product.image_url ?? null,
           pricePerUnit: Number(stock.price_per_unit),
-          currency: stock.currency || 'KES',
+          currency: stock.currency ?? 'KES',
           stockQuantity: Number(stock.current_stock_quantity),
           vendorId: vendor.id,
           vendorName,
@@ -107,43 +103,36 @@ const ProductsPage = () => {
       })
       .filter(Boolean)
       .filter((item) => {
-        if (filters.categoryId && String(item.categoryId) !== filters.categoryId) {
-          return false;
-        }
-
+        if (filters.categoryId && String(item.categoryId) !== filters.categoryId) return false;
         if (!filters.searchTerm) return true;
 
         const priceStr = isNaN(item.pricePerUnit) ? '' : item.pricePerUnit.toFixed(2);
-        const search = searchLower;
 
         return (
-          item.productName.toLowerCase().includes(search) ||
-          priceStr.includes(search) ||
-          item.categoryName.toLowerCase().includes(search) ||
-          item.vendorName.toLowerCase().includes(search)
+          item.productName.toLowerCase().includes(searchLower) ||
+          priceStr.includes(searchLower) ||
+          item.categoryName.toLowerCase().includes(searchLower) ||
+          item.vendorName.toLowerCase().includes(searchLower)
         );
       });
-  }, [stockRecords, products, vendors, categories, filters, categoryMap]);
+  }, [stockRecords, products, vendors, categoryMap, filters]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [filters]);
-
-  const totalPages = Math.ceil(enrichedProducts.length / PRODUCTS_PER_PAGE) || 1;
+  const totalPages = Math.max(1, Math.ceil(enrichedProducts.length / PRODUCTS_PER_PAGE));
   const productsToShow = enrichedProducts.slice(
     (page - 1) * PRODUCTS_PER_PAGE,
     page * PRODUCTS_PER_PAGE
   );
 
-  const handleNextPage = () => setPage((prev) => Math.min(prev + 1, totalPages));
-  const handlePrevPage = () => setPage((prev) => Math.max(prev - 1, 1));
-
+  const handleNextPage = () => setPage((p) => Math.min(p + 1, totalPages));
+  const handlePrevPage = () => setPage((p) => Math.max(p - 1, 1));
   const isLoading = loadingProducts || loadingUsers || loadingCategories || loadingStock;
   const combinedError = errorProducts || errorUsers || errorCategories || errorStock;
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
-  if (combinedError)
+  if (combinedError) {
     return (
       <div className="products-page-container error-state">
         <h1>Product Management</h1>
@@ -156,11 +145,13 @@ const ProductsPage = () => {
             if (errorCategories) refetchCategories();
             if (errorStock) refetchStockRecords();
           }}
+          aria-label="Retry loading data"
         >
           Try Again
         </button>
       </div>
     );
+  }
 
   return (
     <div className="products-page-container">
@@ -168,7 +159,7 @@ const ProductsPage = () => {
 
       <div className="filters-section">
         <div className="search-input-wrapper">
-          <FontAwesomeIcon icon={faSearch} className="search-icon-inside-input" />
+          <FontAwesomeIcon icon={faSearch} className="search-icon-inside-input" aria-hidden="true" />
           <input
             type="text"
             name="searchTerm"
@@ -188,7 +179,7 @@ const ProductsPage = () => {
           aria-label="Filter by category"
         >
           <option value="">All Categories</option>
-          {categories.map((cat) => (
+          {(categories ?? []).map((cat) => (
             <option key={cat.category_id} value={String(cat.category_id)}>
               {cat.category_name}
             </option>
@@ -196,6 +187,7 @@ const ProductsPage = () => {
         </select>
 
         <button
+          type="button"
           onClick={() => setFilters({ searchTerm: '', categoryId: '' })}
           className="filter-reset-action"
           aria-label="Reset filters"
@@ -204,6 +196,7 @@ const ProductsPage = () => {
         </button>
 
         <button
+          type="button"
           onClick={() => {
             refetchProducts();
             refetchUsers();
@@ -213,7 +206,6 @@ const ProductsPage = () => {
           className="filter-reset-action custom-refresh-icon"
           aria-label="Refresh all data"
           title="Refresh All Data"
-          type="button"
         >
           <FontAwesomeIcon icon={faRefresh} />
         </button>
@@ -222,16 +214,16 @@ const ProductsPage = () => {
       {productsToShow.length === 0 ? (
         <p className="no-products-message">No products found matching your criteria.</p>
       ) : (
-        <div className="product-table-layout">
+        <div className="product-table-layout" role="table" aria-label="Products data table">
           <table className="products-data-table">
             <thead>
               <tr>
-                <th>Image</th>
-                <th>Product Name</th>
-                <th>Price (per unit)</th>
-                <th>Stock Quantity(kg or bunch)</th>
-                <th>Category</th>
-                <th>Vendor</th>
+                <th scope="col">Image</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price (per unit)</th>
+                <th scope="col">Stock Quantity (kg or bunch)</th>
+                <th scope="col">Category</th>
+                <th scope="col">Vendor</th>
               </tr>
             </thead>
             <tbody>
@@ -239,14 +231,20 @@ const ProductsPage = () => {
                 <tr key={item.listingId} className="product-table-row">
                   <td data-label="Image">
                     {item.imageUrl ? (
-                      <img src={item.imageUrl} alt={item.productName} className="product-image" />
+                      <img
+                        src={item.imageUrl}
+                        alt={item.productName}
+                        className="product-image"
+                      />
                     ) : (
                       <span>No Image</span>
                     )}
                   </td>
                   <td data-label="Product Name">{item.productName}</td>
                   <td data-label="Price">
-                    {isNaN(item.pricePerUnit) ? 'N/A' : `${item.currency} ${item.pricePerUnit.toFixed(2)}`}
+                    {isNaN(item.pricePerUnit)
+                      ? 'N/A'
+                      : `${item.currency} ${item.pricePerUnit.toFixed(2)}`}
                   </td>
                   <td data-label="Stock Quantity">
                     {isNaN(item.stockQuantity) ? 'N/A' : item.stockQuantity.toFixed(2)}
@@ -261,17 +259,27 @@ const ProductsPage = () => {
       )}
 
       {enrichedProducts.length > 0 && (
-        <div className="pagination-controls">
-          <button onClick={handlePrevPage} disabled={page === 1} className="pagination-button">
+        <nav className="pagination-controls" aria-label="Product list pagination">
+          <button
+            onClick={handlePrevPage}
+            disabled={page === 1}
+            className="pagination-button"
+            aria-disabled={page === 1}
+          >
             Previous
           </button>
-          <span>
+          <span aria-live="polite" aria-atomic="true" className="pagination-status">
             Page {page} of {totalPages}
           </span>
-          <button onClick={handleNextPage} disabled={page === totalPages} className="pagination-button">
+          <button
+            onClick={handleNextPage}
+            disabled={page === totalPages}
+            className="pagination-button"
+            aria-disabled={page === totalPages}
+          >
             Next
           </button>
-        </div>
+        </nav>
       )}
     </div>
   );

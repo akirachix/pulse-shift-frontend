@@ -5,9 +5,10 @@ import { useSalesData } from '../hooks/useSalesData';
 import './style.css';
 
 const SalesDashboard = () => {
-  const [timeRange, setTimeRange] = useState('month'); 
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); 
+  const [timeRange, setTimeRange] = useState('month');
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedWeek, setSelectedWeek] = useState(1);
+
   const {
     salesData,
     popularProducts,
@@ -15,6 +16,7 @@ const SalesDashboard = () => {
     loading,
     error,
   } = useSalesData(timeRange, selectedMonth, selectedWeek);
+
   const months = [
     { value: 1, name: 'January' },
     { value: 2, name: 'February' },
@@ -36,23 +38,25 @@ const SalesDashboard = () => {
     { value: 3, name: 'Week 3' },
     { value: 4, name: 'Week 4' },
   ];
+
   if (loading) {
     return <div className="loading">Loading sales data...</div>;
   }
   if (error) {
     return <div className="error">Error loading sales data: {error.message}</div>;
   }
+  const safeSalesData = salesData ?? [];
+  const safePopularProducts = popularProducts ?? [];
+  const safeTotalSales = typeof totalSales === 'number' ? totalSales : 0;
+  const selectedMonthName = months.find((m) => m.value === selectedMonth)?.name ?? '';
+  const selectedWeekName = weeks.find((w) => w.value === selectedWeek)?.name ?? '';
 
   return (
     <div className="sales-dashboard">
       <div className="dashboard-header">
         <h1>Sales Report</h1>
         <div className="controls">
-          <div
-            className="time-range-selector"
-            role="group"
-            aria-label="Time Range Selector"
-          >
+          <div className="time-range-selector" role="group" aria-label="Time Range Selector">
             <button
               className={timeRange === 'month' ? 'active' : ''}
               aria-pressed={timeRange === 'month'}
@@ -83,7 +87,6 @@ const SalesDashboard = () => {
                 </option>
               ))}
             </select>
-
             {timeRange === 'week' && (
               <>
                 <label htmlFor="week-select" className="visually-hidden">
@@ -105,41 +108,28 @@ const SalesDashboard = () => {
           </div>
         </div>
       </div>
-      <div
-        className="summary-card"
-        role="region"
-        aria-label="Total Sales Summary"
-      >
+      <div className="summary-card" role="region" aria-label="Total Sales Summary">
         <h3>Total Sales</h3>
         <p className="total-sales" aria-live="polite">
-          KES {totalSales.toLocaleString()}
+          KES {safeTotalSales.toLocaleString()}
         </p>
         <p>
           {timeRange === 'month'
-            ? `For ${months.find((m) => m.value === selectedMonth)?.name || ''}`
-            : `For ${
-                weeks.find((w) => w.value === selectedWeek)?.name || ''
-              } of ${months.find((m) => m.value === selectedMonth)?.name || ''}`}
+            ? `For ${selectedMonthName}`
+            : `For ${selectedWeekName} of ${selectedMonthName}`}
         </p>
       </div>
       <div className="charts-container">
-        <section
-          className="chart-wrapper"
-          aria-label="Sales Trend Over Time"
-        >
+        <section className="chart-wrapper" aria-label="Sales Trend Over Time">
           <h2>Sales Trend by all Mama Mbogas</h2>
           <div className="chart-container">
-            <BarChart data={salesData} timeRange={timeRange} />
+            <BarChart data={safeSalesData} timeRange={timeRange} />
           </div>
         </section>
-
-        <section
-          className="chart-wrapper"
-          aria-label="Top 5 Mama Mbogas by Sales"
-        >
+        <section className="chart-wrapper" aria-label="Top 5 Mama Mbogas by Sales">
           <h2>Top 5 Mama Mbogas</h2>
           <div className="chart-container">
-            <PieChart data={popularProducts} />
+            <PieChart data={safePopularProducts} />
           </div>
         </section>
       </div>

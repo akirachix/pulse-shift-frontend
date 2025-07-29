@@ -1,16 +1,15 @@
-
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import ProductsPage from './';
-jest.mock('../hooks/useProducts');
-jest.mock('../hooks/useUsersData');
-jest.mock('../hooks/useCategories');
-jest.mock('../hooks/useStockRecords');
-
+import '@testing-library/jest-dom';
 import useProducts from '../hooks/useProducts';
 import useUsers from '../hooks/useUsersData';
 import useCategories from '../hooks/useCategories';
 import useStockRecords from '../hooks/useStockRecords';
+jest.mock('../hooks/useProducts');
+jest.mock('../hooks/useUsersData');
+jest.mock('../hooks/useCategories');
+jest.mock('../hooks/useStockRecords');
 
 const mockProducts = [
   { product_id: 1, name: 'Tomato', category: 10, image_url: 'tomato.jpg' },
@@ -18,8 +17,8 @@ const mockProducts = [
 ];
 
 const mockUsers = [
-  { id: 1, user_type: 'mama_mboga', first_name: 'Alice', last_name: 'Smith' },
-  { id: 2, user_type: 'customer', first_name: 'Bob', last_name: 'Jones' },
+  { id: 1, user_type: 'mama_mboga', first_name: 'Abel', last_name: 'Smith' },
+  { id: 2, user_type: 'customer', first_name: 'Berisa', last_name: 'Jones' },
 ];
 
 const mockCategories = [
@@ -48,87 +47,117 @@ const mockStockRecords = [
 
 describe('ProductsPage', () => {
   beforeEach(() => {
-    useProducts.mockReturnValue({
-      data: mockProducts,
-      loading: false,
-      error: null,
-      refetch: jest.fn(),
-    });
-    useUsers.mockReturnValue({
-      data: mockUsers,
-      loading: false,
-      error: null,
-      refetch: jest.fn(),
-    });
-    useCategories.mockReturnValue({
-      data: mockCategories,
-      loading: false,
-      error: null,
-      refetch: jest.fn(),
-    });
-    useStockRecords.mockReturnValue({
-      data: mockStockRecords,
-      loading: false,
-      error: null,
-      refetch: jest.fn(),
-    });
+    jest.clearAllMocks();
   });
 
-  test('shows loading spinner when loading', () => {
-    useProducts.mockReturnValueOnce({ loading: true });
-    useUsers.mockReturnValueOnce({ loading: true });
-    useCategories.mockReturnValueOnce({ loading: true });
-    useStockRecords.mockReturnValueOnce({ loading: true });
+  test('shows loading spinner when any hook is loading', () => {
+    useProducts.mockReturnValue({ data: null, loading: true, error: null, refetch: jest.fn() });
+    useUsers.mockReturnValue({ data: null, loading: false, error: null, refetch: jest.fn() });
+    useCategories.mockReturnValue({ data: null, loading: false, error: null, refetch: jest.fn() });
+    useStockRecords.mockReturnValue({ data: null, loading: false, error: null, refetch: jest.fn() });
 
     render(<ProductsPage />);
+
     expect(screen.getByText(/loading data/i)).toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
-  test('displays error message and retry button on error', () => {
+  test('displays error message and retry button when any hook errors', () => {
     const errorMsg = 'Network error';
-    useProducts.mockReturnValueOnce({ loading: false, error: errorMsg, refetch: jest.fn() });
-    useUsers.mockReturnValueOnce({ loading: false, error: null, refetch: jest.fn() });
-    useCategories.mockReturnValueOnce({ loading: false, error: null, refetch: jest.fn() });
-    useStockRecords.mockReturnValueOnce({ loading: false, error: null, refetch: jest.fn() });
+    const refetchProducts = jest.fn();
+    const refetchUsers = jest.fn();
+    const refetchCategories = jest.fn();
+    const refetchStockRecords = jest.fn();
+
+    useProducts.mockReturnValue({ data: null, loading: false, error: errorMsg, refetch: refetchProducts });
+    useUsers.mockReturnValue({ data: null, loading: false, error: null, refetch: refetchUsers });
+    useCategories.mockReturnValue({ data: null, loading: false, error: null, refetch: refetchCategories });
+    useStockRecords.mockReturnValue({ data: null, loading: false, error: null, refetch: refetchStockRecords });
 
     render(<ProductsPage />);
-    expect(screen.getByText(new RegExp(errorMsg, 'i'))).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument();
+
+    expect(screen.getByRole('alert')).toHaveTextContent(errorMsg);
+
+    const retryButton = screen.getByRole('button', { name: /retry loading data/i });
+    expect(retryButton).toBeInTheDocument();
+
+    fireEvent.click(retryButton);
+
+    expect(refetchProducts).toHaveBeenCalled();
+    expect(refetchUsers).not.toHaveBeenCalled();
+    expect(refetchCategories).not.toHaveBeenCalled();
+    expect(refetchStockRecords).not.toHaveBeenCalled();
   });
 
-  test('renders product table with correct data', () => {
-    render(<ProductsPage />);
-    expect(screen.getByRole('table')).toBeInTheDocument();
+  test('renders products table and related content correctly', () => {
+    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
+    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
+    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
+    useStockRecords.mockReturnValue({ data: mockStockRecords, loading: false, error: null, refetch: jest.fn() });
 
-    expect(screen.getByText('Tomato')).toBeInTheDocument();
-    expect(screen.getByText('Onion')).toBeInTheDocument();
-
-    expect(screen.getAllByText(/alice smith/i).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText(/vegetables/i).length).toBeGreaterThanOrEqual(1);
+    const { container } = render(<ProductsPage />);
+    const productTable = container.querySelector('table.products-data-table');
+    expect(productTable).toBeInTheDocument();
+    const tableUtils = within(productTable);
+    expect(tableUtils.getByText('Tomato')).toBeInTheDocument();
+    expect(tableUtils.getByText('Onion')).toBeInTheDocument();
+    expect(tableUtils.getByText('Vegetables')).toBeInTheDocument();
+    expect(tableUtils.getByText('Roots')).toBeInTheDocument();
+    const abelCells = tableUtils.getAllByText(/Abel Smith/i);
+    expect(abelCells.length).toBeGreaterThan(0);
+    const images = tableUtils.getAllByRole('img');
+    expect(images[0]).toHaveAttribute('alt', 'Tomato');
+    expect(images[1]).toHaveAttribute('alt', 'Onion');
   });
 
-  test('filters products by search term', () => {
+  test('shows "No products found" message if no stock records available', () => {
+    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
+    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
+    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
+    useStockRecords.mockReturnValue({ data: [], loading: false, error: null, refetch: jest.fn() });
+
     render(<ProductsPage />);
+    expect(screen.getByText(/no products found matching your criteria/i)).toBeInTheDocument();
+  });
+
+  test('filter input filters product list by search term', () => {
+    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
+    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
+    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
+    useStockRecords.mockReturnValue({ data: mockStockRecords, loading: false, error: null, refetch: jest.fn() });
+
+    render(<ProductsPage />);
+
     const searchInput = screen.getByLabelText(/search products/i);
-
     fireEvent.change(searchInput, { target: { value: 'tomato' } });
 
     expect(screen.getByText('Tomato')).toBeInTheDocument();
     expect(screen.queryByText('Onion')).not.toBeInTheDocument();
   });
 
-  test('filter by category works', () => {
-    render(<ProductsPage />);
-    const categorySelect = screen.getByLabelText(/filter by category/i);
+  test('category select filters product list correctly', () => {
+    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
+    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
+    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
+    useStockRecords.mockReturnValue({ data: mockStockRecords, loading: false, error: null, refetch: jest.fn() });
 
-    fireEvent.change(categorySelect, { target: { value: '10' } });
+    render(<ProductsPage />);
+
+    const categorySelect = screen.getByLabelText(/filter by category/i);
+    fireEvent.change(categorySelect, { target: { value: '10' } }); 
 
     expect(screen.getByText('Tomato')).toBeInTheDocument();
     expect(screen.queryByText('Onion')).not.toBeInTheDocument();
   });
 
-  test('reset filters button clears search and category filters', () => {
+  test('reset filters button clears search and category', () => {
+    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
+    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
+    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
+    useStockRecords.mockReturnValue({ data: mockStockRecords, loading: false, error: null, refetch: jest.fn() });
+
     render(<ProductsPage />);
+
     const searchInput = screen.getByLabelText(/search products/i);
     const categorySelect = screen.getByLabelText(/filter by category/i);
     const resetButton = screen.getByRole('button', { name: /reset filters/i });
@@ -145,11 +174,11 @@ describe('ProductsPage', () => {
     expect(categorySelect.value).toBe('');
   });
 
-  test('pagination controls work properly', () => {
+  test('pagination controls navigate pages properly', () => {
     const manyStockRecords = [];
-    for (let i = 1; i <= 12; i++) {
+    for (let i = 0; i < 12; i++) {
       manyStockRecords.push({
-        inventory_id: 100 + i,
+        inventory_id: 1000 + i,
         product: 1,
         mama_mboga: 1,
         price_per_unit: 50 + i,
@@ -157,20 +186,29 @@ describe('ProductsPage', () => {
         current_stock_quantity: 10 + i,
       });
     }
-    useStockRecords.mockReturnValue({
-      data: manyStockRecords,
-      loading: false,
-      error: null,
-      refetch: jest.fn(),
-    });
+
+    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
+    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
+    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
+    useStockRecords.mockReturnValue({ data: manyStockRecords, loading: false, error: null, refetch: jest.fn() });
+
     render(<ProductsPage />);
+
     expect(screen.getByText(/page 1 of 2/i)).toBeInTheDocument();
-    const nextButton = screen.getByRole('button', { name: /next/i });
-    const prevButton = screen.getByRole('button', { name: /previous/i });
-    expect(prevButton).toBeDisabled();
-    fireEvent.click(nextButton);
+
+    const nextBtn = screen.getByRole('button', { name: /next/i });
+    const prevBtn = screen.getByRole('button', { name: /previous/i });
+
+    expect(prevBtn).toBeDisabled();
+    expect(nextBtn).not.toBeDisabled();
+
+    fireEvent.click(nextBtn);
     expect(screen.getByText(/page 2 of 2/i)).toBeInTheDocument();
-    fireEvent.click(prevButton);
+
+    expect(prevBtn).not.toBeDisabled();
+    expect(nextBtn).toBeDisabled();
+
+    fireEvent.click(prevBtn);
     expect(screen.getByText(/page 1 of 2/i)).toBeInTheDocument();
   });
 });
