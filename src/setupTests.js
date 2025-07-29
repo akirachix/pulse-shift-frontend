@@ -12,3 +12,10 @@ jest.mock('react-router-dom', () => {
         BrowserRouter: ({ children }) => <>{children}</>, 
     };
 });
+
+// Add this ResizeObserver mock to fix Recharts errors in tests
+global.ResizeObserver = global.ResizeObserver || class {
+    observe() { }
+    unobserve() { }
+    disconnect() { }
+};
