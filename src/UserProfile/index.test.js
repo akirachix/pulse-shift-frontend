@@ -47,13 +47,13 @@ describe("Dashboard Component", () => {
       users: [
         {
           id: 1,
-          first_name: "John",
-          last_name: "Doe",
+          first_name: "Fiona",
+          last_name: "Wesonga",
           phone_number: "123456",
           user_type: "customer",
           is_active: true,
           registration_date: "2023-01-01T00:00:00Z",
-          email: "john@example.com",
+          email: "fiona@gmail.com",
         },
       ],
       loading: false,
@@ -61,11 +61,11 @@ describe("Dashboard Component", () => {
     });
     render(<Dashboard />);
 
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
+    expect(screen.getByText(/Fiona Wesonga/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByText(/View/i));
     expect(screen.getByText(/Email:/i)).toBeInTheDocument();
-    expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
+    expect(screen.getByText(/fiona@gmail.com/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("×"));
     expect(screen.queryByText(/Email:/i)).not.toBeInTheDocument();
@@ -76,23 +76,23 @@ describe("Dashboard Component", () => {
       users: [
         {
           id: 1,
-          first_name: "John",
-          last_name: "Doe",
+          first_name: "Fiona",
+          last_name: "Wesonga",
           phone_number: "123456",
           user_type: "customer",
           is_active: true,
           registration_date: "2023-01-01T00:00:00Z",
-          email: "john@example.com",
+          email: "fiona@gmail.com",
         },
         {
           id: 2,
-          first_name: "Jane",
-          last_name: "Smith",
+          first_name: "Jabal",
+          last_name: "Simiyu",
           phone_number: "654321",
           user_type: "customer",
           is_active: true,
           registration_date: "2023-02-01T00:00:00Z",
-          email: "jane@example.com",
+          email: "jabal@gmail.com",
         },
       ],
       loading: false,
