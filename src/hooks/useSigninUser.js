@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../utils/fetchUsersSignIn";
+import { SignIn } from "../utils/fetchUsersSignIn";
 
 export function useUserSignin(onLoginSuccess) {
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ export function useUserSignin(onLoginSuccess) {
     setLoading(true);
 
     try {
-      const data = await loginUser({ username, password });
+      const data = await SignIn({ username, password });
       localStorage.setItem("token", data.token);
 
       if (onLoginSuccess) {

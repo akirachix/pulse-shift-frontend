@@ -1,5 +1,5 @@
 
-export async function loginUser({ username, password }) {
+export async function SignIn({ username, password }) {
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "https://greensmtaani-d6ee50db917a.herokuapp.com";
   const response = await fetch(`${apiBaseUrl}/login/`, {
     method: "POST",

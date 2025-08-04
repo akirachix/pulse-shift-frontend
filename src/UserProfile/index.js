@@ -14,7 +14,7 @@ function formatDate(isoString) {
   });
 }
 
-const Dashboard = () => {
+const UserProfile = () => {
   const { users, loading, error } = useFetchUserData();
   const navigate = useNavigate(); 
   const [searchTerm, setSearchTerm] = useState("");
@@ -227,4 +227,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default UserProfile;

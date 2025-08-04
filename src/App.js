@@ -16,7 +16,6 @@ import AdminDashboard from './Dashboard';
 
 
 
-
 function App() {
   return (
     <BrowserRouter future={{ v7_relativeSplatPath: true }}>
@@ -26,7 +25,6 @@ function App() {
           <Route path="/users" element={<ProfileViewScreen />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/" element={<AdminDashboard />} />
-          <Route path="orders" element={<Orders />} />
           <Route path="products" element={<ProductPage />} />
           <Route path="*" element={<ComingSoon />} />
           <Route path="/sales" element={<SalesDashboard/>} />
