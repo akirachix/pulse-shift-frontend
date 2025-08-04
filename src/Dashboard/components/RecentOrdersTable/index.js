@@ -8,6 +8,8 @@ const capitalizeFirstLetter = (str) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
 
 export default function RecentOrdersTable({ orders, customerMap }) {
+    console.log({orders});
+    
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3; 
 
@@ -15,6 +17,9 @@ export default function RecentOrdersTable({ orders, customerMap }) {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
+
+    console.log({currentOrders});
+    
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -27,11 +32,11 @@ export default function RecentOrdersTable({ orders, customerMap }) {
                     <thead>
                         <tr>
                             <th>Order</th>
+                            <th>Customer Name</th>
+                            <th>Kiosk Name</th>
+                            <th>Order Status</th>
                             <th>Date</th>
-                            <th>Customer</th>
-                            <th>Processing Status</th>
-                            <th>Payment Status</th>
-                            <th>Amount (KES)</th>
+                            <th>Amount(KES)</th>
                         </tr>
                     </thead>
                     <tbody>

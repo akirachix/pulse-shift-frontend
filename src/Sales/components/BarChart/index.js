@@ -1,8 +1,11 @@
+
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import './style.css';
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 const BarChart = ({ data, timeRange }) => {
   const chartData = {
     labels: data.map(item => item.label),
@@ -16,6 +19,7 @@ const BarChart = ({ data, timeRange }) => {
       },
     ],
   };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -44,10 +48,15 @@ const BarChart = ({ data, timeRange }) => {
       },
     },
   };
+
   return (
     <div className="bar-chart">
       <Bar data={chartData} options={options} />
     </div>
   );
 };
+
 export default BarChart;
+
+
+

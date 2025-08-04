@@ -5,9 +5,9 @@ import {
   faHouse,
   faCartShopping,
   faFileAlt,
-  faUser,
   faChartBar,
   faCog,
+  faUser,
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
@@ -41,7 +41,7 @@ export function Sidebar() {
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                aria-label={item.label}
+                aria-label={item.label} 
                 className={({ isActive }) =>
                   isActive ? "active sidebar-link" : "sidebar-link"
                 }
@@ -50,10 +50,7 @@ export function Sidebar() {
                 {({ isActive }) => (
                   <>
                     {isActive && <div className="sidebar-pill"></div>}
-                    <FontAwesomeIcon
-                      icon={item.icon}
-                      className="sidebar-icon"
-                    />
+                    <FontAwesomeIcon icon={item.icon} className="sidebar-icon" />
                     <span>{item.label}</span>
                   </>
                 )}
@@ -68,7 +65,7 @@ export function Sidebar() {
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                aria-label={item.label}
+                aria-label={item.label} 
                 className={({ isActive }) =>
                   isActive ? "active sidebar-link" : "sidebar-link"
                 }
@@ -77,10 +74,7 @@ export function Sidebar() {
                 {({ isActive }) => (
                   <>
                     {isActive && <div className="sidebar-pill"></div>}
-                    <FontAwesomeIcon
-                      icon={item.icon}
-                      className="sidebar-icon"
-                    />
+                    <FontAwesomeIcon icon={item.icon} className="sidebar-icon" />
                     <span>{item.label}</span>
                   </>
                 )}

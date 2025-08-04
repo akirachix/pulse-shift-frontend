@@ -2,7 +2,9 @@ import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import './style.css';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
+
 const PieChart = ({ data }) => {
   const chartData = {
     labels: data.map(item => item.name),
@@ -27,6 +29,7 @@ const PieChart = ({ data }) => {
       },
     ],
   };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -51,10 +54,12 @@ const PieChart = ({ data }) => {
       }
     },
   };
+
   return (
     <div className="pie-chart">
       <Pie data={chartData} options={options} />
     </div>
   );
 };
+
 export default PieChart;
