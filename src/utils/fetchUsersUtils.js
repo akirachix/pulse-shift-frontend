@@ -1,11 +1,12 @@
 export async function fetchUsers() {
-  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "https://greensmtaani-d6ee50db917a.herokuapp.com";
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("Authentication token is missing.");
   }
 
   try {
+    
     const response = await fetch(`${apiBaseUrl}/users/`, {
       method: "GET",
       headers: {
@@ -14,15 +15,9 @@ export async function fetchUsers() {
         Authorization: `Token ${token}`,
       },
     });
+
     if (!response.ok) {
-      let errorMsg = `Failed to fetch users: ${response.status} ${response.statusText}`;
-      try {
-        const errorData = await response.json();
-        errorMsg = errorData.error || errorData.detail || errorMsg;
-      } catch (parseError) {
-        console.error("Error parsing error response:", parseError);
-      }
-      throw new Error(errorMsg);
+      throw new Error(`Failed to fetch: Status ${response.status}`);
     }
     const data = await response.json();
     console.debug("Fetched Users Response:", JSON.stringify(data, null, 2));

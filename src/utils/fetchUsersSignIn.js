@@ -1,6 +1,6 @@
 
 export async function SignIn({ username, password }) {
-  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "https://greensmtaani-d6ee50db917a.herokuapp.com";
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
   const response = await fetch(`${apiBaseUrl}/login/`, {
     method: "POST",
     headers: {
@@ -11,14 +11,9 @@ export async function SignIn({ username, password }) {
   });
 
   if (!response.ok) {
-    let errorMsg = "Invalid username or password";
-    try {
-      const errorData = await response.json();
-      errorMsg = errorData.detail || errorMsg;
-    } catch {
-    }
-    throw new Error(errorMsg);
-  }
+    throw new Error(`Failed to fetch /users: Status ${response.status}`)
+
+ }
 
   const data = await response.json();
 

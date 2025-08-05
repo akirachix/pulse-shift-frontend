@@ -42,7 +42,7 @@ const SignIn = ({ onLoginSuccess }) => {
           <br />
           <span className="advert-orange">Everyday’s a market day!</span>
         </div>
-        <img src="images/signup.jpg" alt="Vegetables" className="signin-image" />
+        <img src="/images/signup.jpg" alt="Vegetables"className="signin-image"/>
       </div>
 
       <div className="signin-form-side">
