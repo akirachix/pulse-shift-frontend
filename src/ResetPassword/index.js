@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useResetPassword } from "../hooks/useResetPassword";
+import { useResetPassword } from "../hooks/useReset";
 import "./index.css";
 
 const ResetPassword = () => {
