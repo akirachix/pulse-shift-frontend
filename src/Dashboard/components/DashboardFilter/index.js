@@ -1,5 +1,4 @@
 import React from 'react';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CustomDropdownFilter from '../../../shared-components/Filter';
 
@@ -20,8 +19,6 @@ export default function DashboardFilter({
     setDateRange,
     error,
 }) {
-    const [startDate, endDate] = dateRange;
-
     return (
         <div className="dashboard-filter">
             <CustomDropdownFilter
@@ -35,27 +32,17 @@ export default function DashboardFilter({
             />
             {filterType === "customDate" && (
                 <>
-                    <DatePicker
+                    
                         selected={customDate}
                         onChange={(date) => setCustomDate(date)}
                         placeholderText="Select a date"
                         dateFormat="yyyy-MM-dd"
                         className="theme-date-input"
-                    />
+                    
                     {error && <p style={{ color: "red", marginTop: 8 }}>{error}</p>}
                 </>
-            )}
-            {filterType === "dateRange" && (
-                <DatePicker
-                    selectsRange
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={(update) => setDateRange(update)}
-                    placeholderText="Select date range"
-                    dateFormat="yyyy-MM-dd"
-                    className="theme-date-input"
-                />
             )}
         </div>
     );
 }
+// import DatePicker from "react-datepicker";

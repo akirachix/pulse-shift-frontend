@@ -7,6 +7,7 @@ import {
   faFileAlt,
   faChartBar,
   faCog,
+  faUser,
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
@@ -16,6 +17,8 @@ const navLinks = [
   { label: "Products", icon: faCartShopping, to: "/products" },
   { label: "Orders", icon: faFileAlt, to: "/orders" },
   { label: "Sales", icon: faChartBar, to: "/sales" },
+  { label: "Users", icon: faUser, to: "/users" },
+
 ];
 
 const bottomLinks = [
