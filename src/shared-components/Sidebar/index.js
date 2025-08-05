@@ -83,4 +83,3 @@ export function Sidebar() {
     </aside>
   );
 }
-
