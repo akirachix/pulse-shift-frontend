@@ -11,7 +11,7 @@ import AdminDashboard from './Dashboard';
 import ComingSoon from "./404";
 import Orders from "./Orders"; 
 import DashboardLayout from './shared-components/Layout';
-// import DashboardLayout from './sharedcomponent/Layout';
+
 
 function App(){
   return(
