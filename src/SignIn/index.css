@@ -297,26 +297,6 @@
  color: #009a17;
 }
 
-.verify-btn {
-  padding: 5px 10px;
-  margin-left: 8px;
-  background: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.verify-btn:disabled {
-  background: #99caff;
-  cursor: not-allowed;
-}
-
-.verify-btn:hover:not(:disabled) {
-  background: #0056b3;
-}
 
 .error-msg {
   color: #ff0000;

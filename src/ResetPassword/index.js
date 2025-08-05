@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { usePasswordReset } from "../hooks/usePasswordReset";
+import { useResetPassword } from "../hooks/useReset";
 import "./index.css";
 
 const ResetPassword = () => {
@@ -11,7 +11,7 @@ const ResetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   const [success, setSuccess] = useState("");
-  const { submitResetPassword, loading, error } = usePasswordReset();
+  const { submitResetPassword, loading, error } = useResetPassword();
 
   const navigate = useNavigate();
   const location = useLocation();

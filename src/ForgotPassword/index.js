@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePasswordReset } from "../hooks/usePasswordReset";
+import './index.css';
+import { useRequestPasswordReset } from "../hooks/useReset";
 
 
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const { sendResetRequest, loading, error } = usePasswordReset();
+  const { sendResetRequest, loading, error } = useRequestPasswordReset();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

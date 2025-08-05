@@ -20,10 +20,9 @@ export async function fetchUsers() {
       throw new Error(`Failed to fetch: Status ${response.status}`);
     }
     const data = await response.json();
-    console.debug("Fetched Users Response:", JSON.stringify(data, null, 2));
     return Array.isArray(data) ? data : data.users || [];
   } catch (error) {
-    console.error("Error in fetchUsers:", error.message);
-    throw error;
+    
+    throw Error("Error in fetchUsers:", error.message)
   }
 }

@@ -16,11 +16,10 @@ import AdminDashboard from './Dashboard';
 
 
 
-function App() {
-  return (
-    <BrowserRouter future={{ v7_relativeSplatPath: true }}>
+function App(){
+  return(
+    <BrowserRouter future={{v7_relativeSplatPath: true}}>
       <Routes>
-        {}
         <Route element={<DashboardLayout />}>
           <Route path="/users" element={<ProfileViewScreen />} />
           <Route path="/orders" element={<Orders />} />
@@ -36,10 +35,9 @@ function App() {
         <Route path="/reset-notification" element={<ResetNotification />} />
         <Route path="/verify" element={<Verify />} />
 
-        <Route path="*" element={<ComingSoon />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
 

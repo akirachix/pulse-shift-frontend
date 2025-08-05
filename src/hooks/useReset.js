@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { requestPasswordReset, resetPassword } from "../utils/passwordReset";
+import { requestPasswordReset, resetPassword } from "../utils/ fetchReset";
 
-export function usePasswordReset() {
+export function useRequestPasswordReset() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -13,11 +13,18 @@ export function usePasswordReset() {
       setLoading(false);
       return data;
     } catch (err) {
-      setError(err.message || "Failed to send OTP.");
+      setError(err.message || "Failed to send reset request");
       setLoading(false);
       throw err;
     }
   };
+
+  return { sendResetRequest, loading, error };
+}
+
+export function useResetPassword() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const submitResetPassword = async ({ email, otp, password }) => {
     setLoading(true);
@@ -27,11 +34,11 @@ export function usePasswordReset() {
       setLoading(false);
       return data;
     } catch (err) {
-      setError(err.message || "Failed to reset password.");
+      setError(err.message || "Failed to reset password");
       setLoading(false);
       throw err;
     }
   };
 
-  return { sendResetRequest, submitResetPassword, loading, error };
+  return { submitResetPassword, loading, error };
 }
