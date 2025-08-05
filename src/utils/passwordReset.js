@@ -1,5 +1,5 @@
 const API_BASE =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:8000/api";
+  process.env.REACT_APP_API_BASE_URL || "https://greensmtaani-d6ee50db917a.herokuapp.com";
 
 export const requestPasswordReset = async (email) => {
   const response = await fetch(`${API_BASE}/reset-request/`, {
