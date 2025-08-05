@@ -1,5 +1,5 @@
 
-export async function SignIn({ username, password }) {
+export async function signIn({ username, password }) {
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
   const response = await fetch(`${apiBaseUrl}/login/`, {
     method: "POST",
