@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useUserSignin } from "../hooks/useSigninUser";
+import { useSigninUser } from "../hooks/useSigninUser";
 import "./index.css";
 
 const SignIn = ({ onLoginSuccess }) => {
@@ -8,7 +8,7 @@ const SignIn = ({ onLoginSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const { signin, error, loading, success } = useUserSignin(onLoginSuccess);
+  const { signin, error, loading, success } = useSigninUser(onLoginSuccess);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -42,7 +42,7 @@ const SignIn = ({ onLoginSuccess }) => {
           <br />
           <span className="advert-orange">Everyday’s a market day!</span>
         </div>
-        <img src="/images/signup.jpg" alt="Vegetables"className="signin-image"/>
+        <img src="images/signup.jpg" alt="Vegetables"className="signin-image"/>
       </div>
 
       <div className="signin-form-side">

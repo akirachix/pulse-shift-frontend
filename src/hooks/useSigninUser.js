@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../utils/fetchUsersSignIn";
 
-export function useUserSignin(onLoginSuccess) {
+export function useSigninUser(onLoginSuccess) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
