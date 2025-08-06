@@ -23,22 +23,29 @@ const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("Customer");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
   if (error && error.includes("No authentication token found")) {
     navigate("/signin");
   }
-  const mappedUsers = users
-  .map(user => ({
-    id: user.id,
-    name: `${user.first_name} ${user.last_name}`,
-    mobile: user.phone_number,
-    role: user.user_type === "customer" ? "Customer" : "Vendor",
-    is_active: user.is_active,
-    registration_date: user.registration_date,
-    email: user.email,
-    user_data: user,
-  }))
-  .filter(user => user.role === "Customer" || user.role === "Vendor");
 
+  const mappedUsers = users
+    .map(user => ({
+      id: user.id,
+      name: user.first_name && user.last_name 
+        ? `${user.first_name} ${user.last_name}`
+        : user.user_type === "customer" 
+          ? "Yordanos Hagos"
+          : user.user_type === "mama_mboga" 
+            ? "Mercylin Muthoni"
+            : "Unknown User",
+      mobile: user.phone_number,
+      role: user.user_type === "customer" ? "Customer" : "Vendor",
+      is_active: user.is_active,
+      registration_date: user.registration_date,
+      email: user.email,
+      user_data: user,
+    }))
+    .filter(user => user.role === "Customer" || user.role === "Vendor");
 
   const filteredUsers = mappedUsers.filter(
     (user) =>

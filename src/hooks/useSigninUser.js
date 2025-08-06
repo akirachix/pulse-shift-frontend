@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../utils/fetchUsersSignIn";
+import { useAuth } from "../AuthContext";
 
 export function useSigninUser(onLoginSuccess) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth()
 
   const validatePassword = (password) => password.length >= 6;
 
@@ -22,6 +24,8 @@ export function useSigninUser(onLoginSuccess) {
     try {
       const data = await signIn({ username, password });
       localStorage.setItem("token", data.token);
+      setIsAuthenticated(true);
+
 
       if (onLoginSuccess) {
         onLoginSuccess(data);

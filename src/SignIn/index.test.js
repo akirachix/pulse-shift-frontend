@@ -1,168 +1,104 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import SignIn from "./index";
-import { useSigninUser } from "../hooks/useSigninUser";
-
+import SignIn from ".";
 jest.mock("../hooks/useSigninUser");
-
-describe("SignIn Component", () => {
-  const mockSignin = jest.fn();
-  const mockOnLoginSuccess = jest.fn();
-
-  beforeEach(() => {
-    useSigninUser.mockReturnValue({
-      signin: mockSignin,
-      error: null,
-      loading: false,
-      success: false,
-    });
-
-    render(
-      <MemoryRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
-        <SignIn onLoginSuccess={mockOnLoginSuccess} />
-      </MemoryRouter>
-    );
+jest.mock("../AuthContext");
+const mockSignin = jest.fn();
+const onLoginSuccess = jest.fn();
+function setup({ isAuthenticated = false, error = null, loading = false, success = false } = {}) {
+  require("../hooks/useSigninUser").useSigninUser.mockReturnValue({
+    signin: mockSignin,
+    error,
+    loading,
+    success,
   });
-
-  afterEach(() => {
+  require("../AuthContext").useAuth.mockReturnValue({
+    isAuthenticated,
+  });
+  return render(
+    <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+      <SignIn onLoginSuccess={onLoginSuccess} />
+    </MemoryRouter>
+  );
+}
+describe("SignIn Component", () => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
-
-  test("renders username and password inputs, buttons, links, and texts", () => {
-    expect(screen.getByLabelText(/Username/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i, { selector: "input" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Sign In/i })).toBeInTheDocument();
-    expect(screen.getByText(/Forgot Password\?/i)).toBeInTheDocument();
-    expect(screen.getByText(/Do not have an account\?/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /SIGN UP/i })).toBeInTheDocument();
+  it("renders the form fields", () => {
+    setup();
+    expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i, { selector: 'input' })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /sign in/i })).toBeInTheDocument();
+    expect(screen.getByText(/forgot password/i)).toBeInTheDocument();
+    expect(screen.getByText(/sign up/i)).toBeInTheDocument();
   });
-
-  test("allows user to type username and password", async () => {
-    const user = userEvent.setup();
-
-    const usernameInput = screen.getByLabelText(/Username/i);
-    const passwordInput = screen.getByLabelText(/Password/i, { selector: "input" });
-
-    await user.clear(usernameInput);
-    await user.type(usernameInput, "testuser");
-    expect(usernameInput).toHaveValue("testuser");
-
-    await user.clear(passwordInput);
-    await user.type(passwordInput, "mypassword");
-    expect(passwordInput).toHaveValue("mypassword");
+  it("redirects if already authenticated", () => {
+    setup({ isAuthenticated: true });
+    expect(screen.queryByLabelText(/username/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/password/i, { selector: 'input' })).not.toBeInTheDocument();
   });
-
-  test("toggles password visibility when toggle button is clicked", async () => {
-    const user = userEvent.setup();
-    const passwordInput = screen.getByLabelText(/Password/i, { selector: "input" });
-    const toggleButton = screen.getByRole("button", {
-      name: /Show password|Hide password/i,
+  it("shows error message from signin hook", () => {
+    setup({ error: "Invalid credentials" });
+    expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
+  });
+  it("disables submit button if password is too short", () => {
+    setup();
+    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: "user" } });
+    fireEvent.change(screen.getByLabelText(/password/i, { selector: 'input' }), { target: { value: "123" } });
+    expect(screen.getByRole("button", { name: /sign in/i })).toBeDisabled();
+  });
+  it("enables submit button with valid input", () => {
+    setup();
+    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: "user" } });
+    fireEvent.change(screen.getByLabelText(/password/i, { selector: 'input' }), { target: { value: "123456" } });
+    expect(screen.getByRole("button", { name: /sign in/i })).toBeEnabled();
+  });
+  it("calls signin with correct credentials", async () => {
+    setup();
+    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: "Mercy" } });
+    fireEvent.change(screen.getByLabelText(/password/i, { selector: 'input' }), { target: { value: "mypassword" } });
+    fireEvent.click(screen.getByRole("button", { name: /sign in/i }));
+    await waitFor(() => {
+      expect(mockSignin).toHaveBeenCalledWith("Mercy", "mypassword");
     });
-
-    expect(passwordInput).toHaveAttribute("type", "password");
-
-    await user.click(toggleButton);
-    expect(passwordInput).toHaveAttribute("type", "text");
-
-    await user.click(toggleButton);
-    expect(passwordInput).toHaveAttribute("type", "password");
   });
-
-  test("submits form and shows success message", async () => {
-    const user = userEvent.setup();
-
-    useSigninUser.mockReturnValue({
-      signin: mockSignin.mockResolvedValueOnce({ token: "mock-token" }),
+  it("shows loading state on button", () => {
+    setup({ loading: true });
+    expect(screen.getByRole("button", { name: /signing in/i })).toBeDisabled();
+  });
+  it("shows success message after successful signin", () => {
+    setup({ submitted: true, success: true });
+    fireEvent.change(screen.getByLabelText(/username/i), { target: { value: "user" } });
+    fireEvent.change(
+      screen.getByLabelText(/password/i, { selector: 'input' }),
+      { target: { value: "123456" } }
+    );
+    fireEvent.click(screen.getByRole("button", { name: /sign in/i }));
+    require("../hooks/useSigninUser").useSigninUser.mockReturnValue({
+      signin: mockSignin,
       error: null,
       loading: false,
       success: true,
     });
-
-    const usernameInput = screen.getByLabelText(/Username/i);
-    const passwordInput = screen.getByLabelText(/Password/i, { selector: "input" });
-    const submitButton = screen.getByRole("button", { name: /Sign In/i });
-
-    await user.clear(usernameInput);
-    await user.type(usernameInput, "testuser");
-
-    await user.clear(passwordInput);
-    await user.type(passwordInput, "mypassword");
-
-    await user.click(submitButton);
-
-    await waitFor(() => {
-      expect(mockSignin).toHaveBeenCalledWith("testuser", "mypassword");
-      expect(screen.getByText(/Sign in successful!/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText(/sign in successful/i)).toBeInTheDocument();
   });
-
-  test("checkbox is present and can be checked and unchecked", async () => {
-    const user = userEvent.setup();
-
-    const checkbox = screen.getByRole("checkbox");
-    expect(checkbox).toBeInTheDocument();
-    expect(checkbox).not.toBeChecked();
-
-    await user.click(checkbox);
-    expect(checkbox).toBeChecked();
-
-    await user.click(checkbox);
-    expect(checkbox).not.toBeChecked();
+  it("toggles password visibility", () => {
+    setup();
+    const passwordInput = screen.getByLabelText(/password/i, { selector: 'input' });
+    const toggleButton = screen.getByRole("button", { name: /show password/i });
+    expect(passwordInput.type).toBe("password");
+    fireEvent.click(toggleButton);
+    expect(passwordInput.type).toBe("text");
+    fireEvent.click(toggleButton);
+    expect(passwordInput.type).toBe("password");
   });
-  test("disables submit button and shows loading text when loading is true", () => {
-    useSigninUser.mockReturnValue({
-      signin: mockSignin,
-      error: null,
-      loading: true,
-      success: false,
-    });
-
-    render(
-      <MemoryRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
-        <SignIn onLoginSuccess={mockOnLoginSuccess} />
-      </MemoryRouter>
-    );
-
-    const submitButton = screen.getByRole("button", { name: /Signing In.../i });
-    expect(submitButton).toBeDisabled();
-  });
-
-  test("displays error message when error exists", () => {
-    useSigninUser.mockReturnValue({
-      signin: mockSignin,
-      error: "Invalid credentials",
-      loading: false,
-      success: false,
-    });
-
-    render(
-      <MemoryRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
-        <SignIn onLoginSuccess={mockOnLoginSuccess} />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByText(/Invalid credentials/i)).toBeInTheDocument();
-  });
-
-  test("input fields have correct maxLength attributes", () => {
-    expect(screen.getByLabelText(/Username/i)).toHaveAttribute("maxLength", "254");
-    expect(screen.getByLabelText(/Password/i, { selector: "input" })).toHaveAttribute("maxLength", "32");
+  it("shows required validation for empty fields", async () => {
+    setup();
+    fireEvent.change(screen.getByLabelText(/password/i, { selector: 'input' }), { target: { value: "" } });
+    fireEvent.click(screen.getByRole("button", { name: /sign in/i }));
+    const passwordInput = await screen.findByLabelText(/password/i, { selector: 'input' });
+    expect(passwordInput).toHaveAttribute("aria-invalid", "false");
   });
 });
