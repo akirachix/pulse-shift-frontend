@@ -1,214 +1,203 @@
 import React from 'react';
-import { render, screen, fireEvent, within } from '@testing-library/react';
-import ProductsPage from './';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import ProductsPage from '.';
+
+jest.mock('@fortawesome/react-fontawesome', () => ({
+  FontAwesomeIcon: () => <span>Icon</span>,
+}));
+jest.mock('@fortawesome/free-solid-svg-icons', () => ({
+  faSearch: 'fa-search',
+  faRefresh: 'fa-refresh',
+}));
+
+jest.mock('../hooks/useProducts');
+jest.mock('../hooks/useUsersData'); 
+jest.mock('../hooks/useCategories');
+
 import useProducts from '../hooks/useProducts';
 import useUsers from '../hooks/useUsersData';
 import useCategories from '../hooks/useCategories';
-import useStockRecords from '../hooks/useStockRecords';
-jest.mock('../hooks/useProducts');
-jest.mock('../hooks/useUsersData');
-jest.mock('../hooks/useCategories');
-jest.mock('../hooks/useStockRecords');
 
 const mockProducts = [
-  { product_id: 1, name: 'Tomato', category: 10, image_url: 'tomato.jpg' },
-  { product_id: 2, name: 'Onion', category: 20, image_url: 'onion.jpg' },
+  { product_id: '1', name: 'Tomato', price_per_unit: '50', currency: 'KES', current_stock_quantity: '100', vendor_id: '1', category: '1' },
+  { product_id: '2', name: 'Potato', price_per_unit: '30', currency: 'KES', current_stock_quantity: '200', vendor_id: '2', category: '2' },
+  { product_id: '3', name: 'Spinach', price_per_unit: '20', currency: 'KES', current_stock_quantity: '50', vendor_id: '1', category: '1' },
 ];
 
 const mockUsers = [
-  { id: 1, user_type: 'mama_mboga', first_name: 'Abel', last_name: 'Smith' },
-  { id: 2, user_type: 'customer', first_name: 'Berisa', last_name: 'Jones' },
+  { id: '1', first_name: 'Alice', last_name: 'Smith', user_type: 'mama_mboga' },
+  { id: '2', first_name: 'Bob', last_name: 'Jones', user_type: 'mama_mboga' },
 ];
 
 const mockCategories = [
-  { category_id: 10, category_name: 'Vegetables' },
-  { category_id: 20, category_name: 'Roots' },
+  { category_id: '1', category_name: 'Vegetables' },
+  { category_id: '2', category_name: 'Root Crops' },
 ];
 
-const mockStockRecords = [
-  {
-    inventory_id: 101,
-    product: 1,
-    mama_mboga: 1,
-    price_per_unit: 100,
-    currency: 'KES',
-    current_stock_quantity: 50,
-  },
-  {
-    inventory_id: 102,
-    product: 2,
-    mama_mboga: 1,
-    price_per_unit: 80,
-    currency: 'KES',
-    current_stock_quantity: 30,
-  },
+
+const mockProductsWithPagination = [
+  ...mockProducts,
+  { product_id: '4', name: 'Cabbage', price_per_unit: '40', currency: 'KES', current_stock_quantity: '75', vendor_id: '2', category: '2' },
+  { product_id: '5', name: 'Carrot', price_per_unit: '25', currency: 'KES', current_stock_quantity: '150', vendor_id: '1', category: '1' },
+  { product_id: '6', name: 'Onion', price_per_unit: '35', currency: 'KES', current_stock_quantity: '120', vendor_id: '2', category: '2' },
+  { product_id: '7', name: 'Lettuce', price_per_unit: '45', currency: 'KES', current_stock_quantity: '80', vendor_id: '1', category: '1' },
 ];
 
 describe('ProductsPage', () => {
+  let refetchProducts;
+  let refetchUsers;
+  let refetchCategories;
+
   beforeEach(() => {
+    refetchProducts = jest.fn();
+    refetchUsers = jest.fn();
+    refetchCategories = jest.fn();
+
+    useProducts.mockReturnValue({
+      data: mockProducts,
+      loading: false,
+      error: null,
+      refetch: refetchProducts,
+    });
+
+    useUsers.mockReturnValue({
+      data: mockUsers,
+      loading: false,
+      error: null,
+      refetch: refetchUsers,
+    });
+
+    useCategories.mockReturnValue({
+      data: mockCategories,
+      loading: false,
+      error: null,
+      refetch: refetchCategories,
+    });
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('shows loading spinner when any hook is loading', () => {
-    useProducts.mockReturnValue({ data: null, loading: true, error: null, refetch: jest.fn() });
-    useUsers.mockReturnValue({ data: null, loading: false, error: null, refetch: jest.fn() });
-    useCategories.mockReturnValue({ data: null, loading: false, error: null, refetch: jest.fn() });
-    useStockRecords.mockReturnValue({ data: null, loading: false, error: null, refetch: jest.fn() });
+  test('renders loading spinner when any hook is loading', () => {
+    useProducts.mockReturnValue({
+      data: null,
+      loading: true,
+      error: null,
+      refetch: jest.fn(),
+    });
 
     render(<ProductsPage />);
-
-    expect(screen.getByText(/loading data/i)).toBeInTheDocument();
-    expect(screen.getByRole('status')).toBeInTheDocument();
+    expect(screen.getByText('Loading data...')).toBeInTheDocument();
   });
 
-  test('displays error message and retry button when any hook errors', () => {
-    const errorMsg = 'Network error';
-    const refetchProducts = jest.fn();
-    const refetchUsers = jest.fn();
-    const refetchCategories = jest.fn();
-    const refetchStockRecords = jest.fn();
-
-    useProducts.mockReturnValue({ data: null, loading: false, error: errorMsg, refetch: refetchProducts });
-    useUsers.mockReturnValue({ data: null, loading: false, error: null, refetch: refetchUsers });
-    useCategories.mockReturnValue({ data: null, loading: false, error: null, refetch: refetchCategories });
-    useStockRecords.mockReturnValue({ data: null, loading: false, error: null, refetch: refetchStockRecords });
+  test('displays error message and retry button when any hook fails', () => {
+    useProducts.mockReturnValue({
+      data: null,
+      loading: false,
+      error: 'Failed to fetch products',
+      refetch: refetchProducts,
+    });
 
     render(<ProductsPage />);
-
-    expect(screen.getByRole('alert')).toHaveTextContent(errorMsg);
-
-    const retryButton = screen.getByRole('button', { name: /retry loading data/i });
+    expect(screen.getByText('Error: Failed to fetch products')).toBeInTheDocument();
+    const retryButton = screen.getByRole('button', { name: 'Retry loading data' });
     expect(retryButton).toBeInTheDocument();
 
     fireEvent.click(retryButton);
-
     expect(refetchProducts).toHaveBeenCalled();
-    expect(refetchUsers).not.toHaveBeenCalled();
-    expect(refetchCategories).not.toHaveBeenCalled();
-    expect(refetchStockRecords).not.toHaveBeenCalled();
   });
 
-  test('renders products table and related content correctly', () => {
-    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
-    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
-    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
-    useStockRecords.mockReturnValue({ data: mockStockRecords, loading: false, error: null, refetch: jest.fn() });
-
-    const { container } = render(<ProductsPage />);
-    const productTable = container.querySelector('table.products-data-table');
-    expect(productTable).toBeInTheDocument();
-    const tableUtils = within(productTable);
-    expect(tableUtils.getByText('Tomato')).toBeInTheDocument();
-    expect(tableUtils.getByText('Onion')).toBeInTheDocument();
-    expect(tableUtils.getByText('Vegetables')).toBeInTheDocument();
-    expect(tableUtils.getByText('Roots')).toBeInTheDocument();
-    const abelCells = tableUtils.getAllByText(/Abel Smith/i);
-    expect(abelCells.length).toBeGreaterThan(0);
-    const images = tableUtils.getAllByRole('img');
-    expect(images[0]).toHaveAttribute('alt', 'Tomato');
-    expect(images[1]).toHaveAttribute('alt', 'Onion');
-  });
-
-  test('shows "No products found" message if no stock records available', () => {
-    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
-    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
-    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
-    useStockRecords.mockReturnValue({ data: [], loading: false, error: null, refetch: jest.fn() });
-
+  test('filters products by search term', async () => {
     render(<ProductsPage />);
-    expect(screen.getByText(/no products found matching your criteria/i)).toBeInTheDocument();
+    const searchInput = screen.getByLabelText('Search products');
+
+    fireEvent.change(searchInput, { target: { value: 'Tomato' } });
+    await waitFor(() => {
+      expect(screen.getByText('Tomato')).toBeInTheDocument();
+      expect(screen.queryByText('Potato')).not.toBeInTheDocument();
+    });
   });
 
-  test('filter input filters product list by search term', () => {
-    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
-    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
-    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
-    useStockRecords.mockReturnValue({ data: mockStockRecords, loading: false, error: null, refetch: jest.fn() });
-
+  test('filters products by category', async () => {
     render(<ProductsPage />);
+    const categorySelect = screen.getByLabelText('Filter by category');
 
-    const searchInput = screen.getByLabelText(/search products/i);
-    fireEvent.change(searchInput, { target: { value: 'tomato' } });
-
-    expect(screen.getByText('Tomato')).toBeInTheDocument();
-    expect(screen.queryByText('Onion')).not.toBeInTheDocument();
+    fireEvent.change(categorySelect, { target: { value: '1' } });
+    await waitFor(() => {
+      expect(screen.getByText('Tomato')).toBeInTheDocument();
+      expect(screen.getByText('Spinach')).toBeInTheDocument();
+      expect(screen.queryByText('Potato')).not.toBeInTheDocument();
+    });
   });
 
-  test('category select filters product list correctly', () => {
-    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
-    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
-    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
-    useStockRecords.mockReturnValue({ data: mockStockRecords, loading: false, error: null, refetch: jest.fn() });
-
+  test('resets filters when reset button is clicked', async () => {
     render(<ProductsPage />);
+    const searchInput = screen.getByLabelText('Search products');
+    const resetButton = screen.getByRole('button', { name: 'Reset filters' });
 
-    const categorySelect = screen.getByLabelText(/filter by category/i);
-    fireEvent.change(categorySelect, { target: { value: '10' } }); 
-
-    expect(screen.getByText('Tomato')).toBeInTheDocument();
-    expect(screen.queryByText('Onion')).not.toBeInTheDocument();
-  });
-
-  test('reset filters button clears search and category', () => {
-    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
-    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
-    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
-    useStockRecords.mockReturnValue({ data: mockStockRecords, loading: false, error: null, refetch: jest.fn() });
-
-    render(<ProductsPage />);
-
-    const searchInput = screen.getByLabelText(/search products/i);
-    const categorySelect = screen.getByLabelText(/filter by category/i);
-    const resetButton = screen.getByRole('button', { name: /reset filters/i });
-
-    fireEvent.change(searchInput, { target: { value: 'tomato' } });
-    fireEvent.change(categorySelect, { target: { value: '10' } });
-
-    expect(searchInput.value).toBe('tomato');
-    expect(categorySelect.value).toBe('10');
+    fireEvent.change(searchInput, { target: { value: 'Tomato' } });
+    await waitFor(() => {
+      expect(screen.getByText('Tomato')).toBeInTheDocument();
+      expect(screen.queryByText('Potato')).not.toBeInTheDocument();
+    });
 
     fireEvent.click(resetButton);
-
-    expect(searchInput.value).toBe('');
-    expect(categorySelect.value).toBe('');
+    await waitFor(() => {
+      expect(screen.getByText('Potato')).toBeInTheDocument();
+    });
   });
 
-  test('pagination controls navigate pages properly', () => {
-    const manyStockRecords = [];
-    for (let i = 0; i < 12; i++) {
-      manyStockRecords.push({
-        inventory_id: 1000 + i,
-        product: 1,
-        mama_mboga: 1,
-        price_per_unit: 50 + i,
-        currency: 'KES',
-        current_stock_quantity: 10 + i,
-      });
-    }
+  test('refreshes data when refresh button is clicked', () => {
+    render(<ProductsPage />);
+    const refreshButton = screen.getByRole('button', { name: 'Refresh all data' });
 
-    useProducts.mockReturnValue({ data: mockProducts, loading: false, error: null, refetch: jest.fn() });
-    useUsers.mockReturnValue({ data: mockUsers, loading: false, error: null, refetch: jest.fn() });
-    useCategories.mockReturnValue({ data: mockCategories, loading: false, error: null, refetch: jest.fn() });
-    useStockRecords.mockReturnValue({ data: manyStockRecords, loading: false, error: null, refetch: jest.fn() });
+    fireEvent.click(refreshButton);
+    expect(refetchProducts).toHaveBeenCalled();
+    expect(refetchUsers).toHaveBeenCalled();
+    expect(refetchCategories).toHaveBeenCalled();
+  });
+
+  test('shows pagination controls when more than 6 products', () => {
+    useProducts.mockReturnValue({
+      data: mockProductsWithPagination,
+      loading: false,
+      error: null,
+      refetch: jest.fn(),
+    });
 
     render(<ProductsPage />);
+    expect(screen.getByRole('button', { name: 'Previous' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
+    expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
+  });
 
-    expect(screen.getByText(/page 1 of 2/i)).toBeInTheDocument();
+  test('changes page when pagination buttons are clicked', async () => {
+    useProducts.mockReturnValue({
+      data: mockProductsWithPagination,
+      loading: false,
+      error: null,
+      refetch: jest.fn(),
+    });
 
-    const nextBtn = screen.getByRole('button', { name: /next/i });
-    const prevBtn = screen.getByRole('button', { name: /previous/i });
+    render(<ProductsPage />);
+    expect(screen.getByText('Tomato')).toBeInTheDocument();
+    expect(screen.queryByText('Lettuce')).not.toBeInTheDocument();
 
-    expect(prevBtn).toBeDisabled();
-    expect(nextBtn).not.toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await waitFor(() => {
+      expect(screen.getByText('Lettuce')).toBeInTheDocument();
+      expect(screen.queryByText('Tomato')).not.toBeInTheDocument();
+    });
+  });
 
-    fireEvent.click(nextBtn);
-    expect(screen.getByText(/page 2 of 2/i)).toBeInTheDocument();
+  test('displays "No products found" when no products match filters', async () => {
+    render(<ProductsPage />);
+    const searchInput = screen.getByLabelText('Search products');
 
-    expect(prevBtn).not.toBeDisabled();
-    expect(nextBtn).toBeDisabled();
-
-    fireEvent.click(prevBtn);
-    expect(screen.getByText(/page 1 of 2/i)).toBeInTheDocument();
+    fireEvent.change(searchInput, { target: { value: 'Nonexistent' } });
+    await waitFor(() => {
+      expect(screen.getByText('No products found matching your criteria.')).toBeInTheDocument();
+    });
   });
 });

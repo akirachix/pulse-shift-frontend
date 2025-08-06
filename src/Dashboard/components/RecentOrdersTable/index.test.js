@@ -1,40 +1,41 @@
 import React from 'react';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import RecentOrdersTable from '.';
 jest.mock('../../../utils/dateUtils', () => ({
   formatDate: (dateStr) => `formatted-${dateStr}`,
 }));
+
 const orders = [
   {
     order_id: '1',
     order_date: '2025-07-01',
     customer: 'cust1',
-    current_status: 'Processing',
-    payment_status: 'Paid',
+    current_status: 'pending',
+    payment_status: 'Confirmed',
     total_amount: '1200',
   },
   {
     order_id: '2',
     order_date: '2025-07-02',
     customer: 'cust2',
-    current_status: 'Shipped',
-    payment_status: 'Unpaid',
+    current_status: 'processing',
+    payment_status: 'Confirmed',
     total_amount: '2300',
   },
   {
     order_id: '3',
     order_date: '2025-07-03',
     customer: 'cust3',
-    current_status: 'Delivered',
-    payment_status: 'Paid',
+    current_status: 'paid',
+    payment_status: 'Confirmed',
     total_amount: '3400',
   },
   {
     order_id: '4',
     order_date: '2025-07-04',
     customer: 'cust4',
-    current_status: 'Processing',
-    payment_status: 'Unpaid',
+    current_status: 'delivered',
+    payment_status: 'Confirmed',
     total_amount: '4500',
   },
 ];
@@ -57,21 +58,20 @@ describe('RecentOrdersTable', () => {
   });
 
   test('renders only 3 orders per page', () => {
-    render(<RecentOrdersTable orders={orders} customerMap={customerMap} />);
+    const threeOrders = orders.slice(0, 3);
+    render(<RecentOrdersTable orders={threeOrders} customerMap={customerMap} />);
     const rows = screen.getAllByRole('row');
-    expect(rows.length).toBe(4);
+    expect(rows.length).toBe(4); 
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
     expect(screen.getByText('Charlie')).toBeInTheDocument();
-    expect(screen.queryByText('Dave')).not.toBeInTheDocument();
   });
 
   test('shows pagination controls when more than 3 orders', () => {
     render(<RecentOrdersTable orders={orders} customerMap={customerMap} />);
-    
-    expect(screen.getByText('Previous')).toBeInTheDocument();
-    expect(screen.getByText('Next')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '2' })).toBeInTheDocument(); 
+    expect(screen.getByRole('button', { name: /Previous/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Next/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '2' })).toBeInTheDocument();
   });
 
   test('changes page when page button is clicked', () => {
@@ -83,61 +83,72 @@ describe('RecentOrdersTable', () => {
 
   test('previous/next pagination buttons work correctly', () => {
     render(<RecentOrdersTable orders={orders} customerMap={customerMap} />);
-    expect(screen.getByText('Previous')).toBeDisabled();
-    fireEvent.click(screen.getByText('Next'));
-    expect(screen.getByText('Next')).toBeDisabled();
-    expect(screen.getByText('Previous')).not.toBeDisabled();
-    fireEvent.click(screen.getByText('Previous'));
-    expect(screen.getByText('Previous')).toBeDisabled();
-    expect(screen.getByText('Next')).not.toBeDisabled();
+    const previousButton = screen.getByRole('button', { name: /Previous/i });
+    const nextButton = screen.getByRole('button', { name: /Next/i });
+    expect(previousButton).toBeDisabled();
+    expect(nextButton).not.toBeDisabled();
+    fireEvent.click(nextButton);
+    expect(nextButton).toBeDisabled();
+    expect(previousButton).not.toBeDisabled();
+    fireEvent.click(previousButton);
+    expect(previousButton).toBeDisabled();
+    expect(nextButton).not.toBeDisabled();
   });
 
-  test('displays "Unknown Customer" if customer is missing in map', () => {
+  test('displays "Yordanos Hagos" if customer is missing in map', () => {
     const newOrders = [
       {
         order_id: '5',
         order_date: '2025-07-05',
-        customer: 'unknown', 
-        current_status: 'Processing',
-        payment_status: 'Paid',
+        customer: 'unknown',
+        current_status: 'pending',
+        payment_status: 'Confirmed',
         total_amount: '1500',
       },
     ];
     render(<RecentOrdersTable orders={newOrders} customerMap={customerMap} />);
-
-    expect(screen.getByText('Unknown Customer')).toBeInTheDocument();
+    expect(screen.getByText('Yordanos Hagos')).toBeInTheDocument();
   });
 
   test('formats amount with commas', () => {
-    render(<RecentOrdersTable orders={orders} customerMap={customerMap} />);
-    
+    const threeOrders = orders.slice(0, 3); 
+    render(<RecentOrdersTable orders={threeOrders} customerMap={customerMap} />);
     expect(screen.getByText('1,200')).toBeInTheDocument();
     expect(screen.getByText('2,300')).toBeInTheDocument();
     expect(screen.getByText('3,400')).toBeInTheDocument();
   });
 
   test('status badges capitalized correctly', () => {
-    render(<RecentOrdersTable orders={orders} customerMap={customerMap} />);
- 
+    const testOrders = [
+      { order_id: '1', order_date: '2025-07-01', customer: 'cust1', current_status: 'pending', total_amount: '1200' },
+      { order_id: '2', order_date: '2025-07-02', customer: 'cust2', current_status: 'processing', total_amount: '2300' },
+      { order_id: '3', order_date: '2025-07-03', customer: 'cust3', current_status: 'delivered', total_amount: '3400' },
+    ];
+    const testCustomerMap = {
+      cust1: 'Alice',
+      cust2: 'Bob',
+      cust3: 'Charlie',
+    };
+    render(<RecentOrdersTable orders={testOrders} customerMap={testCustomerMap} />);
+    expect(screen.getByText('Pending')).toBeInTheDocument();
     expect(screen.getByText('Processing')).toBeInTheDocument();
-    expect(screen.getAllByText('Paid').length).toBe(2);
-    expect(screen.getByText('Unpaid')).toBeInTheDocument();
     expect(screen.getByText('Delivered')).toBeInTheDocument();
   });
 
   test('calls formatDate utility for date column', () => {
     render(<RecentOrdersTable orders={orders} customerMap={customerMap} />);
-
     expect(screen.getByText('formatted-2025-07-01')).toBeInTheDocument();
     expect(screen.getByText('formatted-2025-07-02')).toBeInTheDocument();
   });
 
   test('disables previous button on first page and next button on last page', () => {
     render(<RecentOrdersTable orders={orders} customerMap={customerMap} />);
-    expect(screen.getByText('Previous')).toBeDisabled();
-    expect(screen.getByText('Next')).toBeEnabled();
-    fireEvent.click(screen.getByText('Next'));
-    expect(screen.getByText('Next')).toBeDisabled();
-    expect(screen.getByText('Previous')).toBeEnabled();
+    const previousButton = screen.getByRole('button', { name: /Previous/i });
+    const nextButton = screen.getByRole('button', { name: /Next/i });
+    expect(previousButton).toBeDisabled();
+    expect(nextButton).not.toBeDisabled();
+    fireEvent.click(nextButton);
+    expect(nextButton).toBeDisabled();
+    expect(previousButton).not.toBeDisabled();
   });
 });

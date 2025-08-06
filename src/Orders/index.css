@@ -9,6 +9,7 @@ body{
 }
 .orders-page {
   margin-top: 20px;
+  margin-left: 5%;
   margin-bottom: 30px;
   background: #fff;
   padding: 20px;
@@ -53,6 +54,9 @@ body{
   border: 1px solid #ccc;
   font-size: 1em;
   min-width: 150px;
+}
+.orders-table{
+  margin: 0 auto;
 }
 .orders-table tbody tr.order-row {
   margin-bottom: 12px; 
@@ -200,4 +204,65 @@ body{
 
 .pagination button:hover:not(:disabled) {
   background-color: #497e50;
+}
+
+
+@media (width: 1024px) and (height: 600px) {
+  .orders-page {
+    margin-left: 1%;
+    margin-right: 1%;
+    padding: 15px;
+  }
+  
+  .orders-table {
+    margin-left: 0;
+    width: 100%;
+    font-size: 0.9em;
+  }
+  
+  .orders-table th,
+  .orders-table td {
+    padding: 8px 10px;
+  }
+  
+  .status {
+    min-width: 70px;
+    font-size: 0.8em;
+    height: 24px;
+    line-height: 24px;
+  }
+  
+  .payment-btn {
+    width: 80px;
+    height: 30px;
+    font-size: 0.85em;
+  }
+  
+  .filter-container {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .filter-container input {
+    flex-basis: 45%;
+  }
+  
+  .filter-container select {
+    min-width: 120px;
+  }
+  
+  .orders-page h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  .pagination {
+    margin-top: 30px;
+  }
+  
+  .pagination button {
+    padding: 4px 10px;
+    font-size: 0.9em;
+  }
+
 }

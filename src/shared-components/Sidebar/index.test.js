@@ -31,6 +31,7 @@ describe("Sidebar Component", () => {
             "Products",
             "Orders",
             "Sales",
+            "Users",
             "Settings",
             "Log Out",
         ];
@@ -42,7 +43,7 @@ describe("Sidebar Component", () => {
     test("renders correct number of icons", () => {
         const { container } = renderWithRouter(<Sidebar />);
         const icons = container.querySelectorAll(".sidebar-icon");
-        expect(icons.length).toBe(6);
+        expect(icons.length).toBe(7);
     });
 
     test("highlights Home as active by default on '/' route", () => {

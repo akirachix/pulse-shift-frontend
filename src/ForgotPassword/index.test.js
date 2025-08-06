@@ -3,15 +3,15 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ForgotPassword from './index.js';
 
-import { usePasswordReset } from '../hooks/usePasswordReset';
+import { useRequestPasswordReset } from '../hooks/useReset';
 
-jest.mock('../hooks/usePasswordReset');
+jest.mock('../hooks/useReset');
 
 describe('ForgotPassword Component', () => {
   const mockSendResetRequest = jest.fn();
 
   beforeEach(() => {
-    usePasswordReset.mockReturnValue({
+    useRequestPasswordReset.mockReturnValue({
       sendResetRequest: mockSendResetRequest,
       loading: false,
       error: null,
@@ -75,19 +75,20 @@ describe('ForgotPassword Component', () => {
     });
   });
 
-  test('disables button when loading', async () => {
-    usePasswordReset.mockReturnValue({
-      sendResetRequest: mockSendResetRequest,
-      loading: true,
-      error: null,
-    });
-
-    render(
-      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
-        <ForgotPassword />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByRole('button', { name: /Sending.../i })).toBeDisabled();
+test('disables button when loading', async () => {
+  useRequestPasswordReset.mockReturnValue({
+    sendResetRequest: mockSendResetRequest,
+    loading: true,
+    error: null,
   });
+
+  render(
+    <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+      <ForgotPassword />
+    </MemoryRouter>
+  );
+
+  expect(screen.getByRole('button', { name: /Sending.../i })).toBeDisabled();
+});
+
 });

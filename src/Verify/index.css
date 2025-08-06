@@ -170,6 +170,14 @@
     flex-direction: row;
     overflow-x: hidden;
   }
+  .otp-form p {
+   font-size: 1.1rem;
+  color: #222;
+  font-weight: 600;
+  margin-bottom: 1.3rem;
+  margin-left: 8px;
+  white-space: nowrap;
+}
   .verify-left,
   .verify-right {
     width: 50%;
@@ -182,7 +190,7 @@
     object-position: center right;
   }
   .otp-form h1 {
-    font-size: 40px;
+    font-size: 38px;
   }
   .advert-green {
     font-size: 3rem !important;
@@ -200,7 +208,6 @@
     font-size: 1rem;
     padding: 0.7em;
     width: 113%;
-   
   }
   .verify-btn {
     width: 70%;
@@ -213,8 +220,6 @@
     margin-left: 3%;
   }
 }
-
-
 @media (min-width: 1024px) and (max-width: 1024.98px) and (min-height: 701px) {
   .verify-container {
     flex-direction: column;
@@ -224,7 +229,7 @@
     font-size: 1.9rem;
   }
   .verify-left {
-    max-height: 89vh !important;
+    max-height: 89vh!important;
     width: 99vw;
   }
   .verify-signup-link {
@@ -238,7 +243,7 @@
     object-position: center;
   }
   .otp-form h1 {
-    font-size: 75px;
+    font-size: 60px;
   }
   .advert-green {
     margin-top: 46% !important;
@@ -272,8 +277,6 @@
     margin-left: 1%;
   }
 }
-
-
 @media (min-width: 1024px) and (max-width: 1024.98px) and (max-height: 700px) {
   .verify-container {
     flex-direction: row;
@@ -283,6 +286,14 @@
     gap: 0.8rem !important;
     margin-top: 0 !important;
   }
+    .otp-form p {
+   font-size: 0.9rem;
+  color: #222;
+  font-weight: 600;
+  margin-bottom: 1.3rem;
+  margin-left: 8px;
+  white-space: nowrap;
+}
   .otp-input::placeholder {
     font-size: 1rem;
   }
@@ -355,8 +366,6 @@
     margin-left: 10%;
   }
 }
-
-
 @media (min-width: 912px) and (max-width: 912.98px) {
   .verify-container {
     overflow-x: hidden;
@@ -409,8 +418,6 @@
     margin-top: 0.5%;
   }
 }
-
-
 @media (min-width: 853px) and (max-width: 853.98px) {
   .verify-container {
     overflow-x: hidden;
@@ -469,8 +476,6 @@
     font-size: 1.7rem;
   }
 }
-
-
 @media (min-width: 820px) and (max-width: 820.98px) {
   .verify-container {
     overflow-x: hidden;
@@ -528,8 +533,6 @@
     margin-left: 2%;
   }
 }
-
-
 @media (min-width: 768px) and (max-width: 768.98px) {
   .verify-container {
     overflow-x: hidden;
@@ -583,8 +586,6 @@
     margin-left: 2%;
   }
 }
-
-
 @media (min-width: 540px) and (max-width: 540.98px) {
   .verify-container {
     overflow-x: hidden;
@@ -662,8 +663,6 @@
     width: 50% !important;
   }
 }
-
-
 @media (min-width: 430px) and (max-width: 430.98px) {
   .verify-container {
     overflow-x: hidden;
@@ -712,8 +711,6 @@
     text-decoration: none;
   }
 }
-
-
 @media (min-width: 412px) and (max-width: 412.98px) and (min-height: 914px) and (max-height: 914.98px) {
   .verify-container {
     overflow-x: hidden;

@@ -2,27 +2,21 @@ import React, { useState, useMemo, useEffect } from 'react';
 import useProducts from '../hooks/useProducts';
 import useUsers from '../hooks/useUsersData';
 import useCategories from '../hooks/useCategories';
-import useStockRecords from '../hooks/useStockRecords';
 import './style.css';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRefresh, faSearch } from '@fortawesome/free-solid-svg-icons';
-
 const LoadingSpinner = () => (
   <div className="loading-spinner-container" role="status" aria-live="polite" aria-busy="true">
     <div className="loading-spinner-element"></div>
     <p>Loading data...</p>
   </div>
 );
-
 const ErrorMessageDisplay = ({ message }) => (
   <div role="alert" className="error-message-container" style={{ color: 'red' }}>
     <p>Error: {message}</p>
   </div>
 );
-
 const PRODUCTS_PER_PAGE = 6;
-
 const ProductsPage = () => {
   const {
     data: products,
@@ -30,84 +24,60 @@ const ProductsPage = () => {
     error: errorProducts,
     refetch: refetchProducts,
   } = useProducts();
-
   const {
     data: users,
     loading: loadingUsers,
     error: errorUsers,
     refetch: refetchUsers,
   } = useUsers();
-
   const {
     data: categories,
     loading: loadingCategories,
     error: errorCategories,
     refetch: refetchCategories,
   } = useCategories();
-
-  const {
-    data: stockRecords,
-    loading: loadingStock,
-    error: errorStock,
-    refetch: refetchStockRecords,
-  } = useStockRecords();
-
   const [filters, setFilters] = useState({ searchTerm: '', categoryId: '' });
   const [page, setPage] = useState(1);
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
-
   useEffect(() => {
     setPage(1);
   }, [filters]);
-
   const vendors = useMemo(() => {
     return (users ?? []).filter((u) => u.user_type === 'mama_mboga');
   }, [users]);
   const categoryMap = useMemo(() => {
     return new Map((categories ?? []).map((c) => [String(c.category_id), c.category_name]));
   }, [categories]);
-
   const enrichedProducts = useMemo(() => {
-    const productMap = new Map((products ?? []).map((p) => [String(p.product_id), p]));
     const vendorMap = new Map(vendors.map((v) => [String(v.id), v]));
     const searchLower = (filters.searchTerm ?? '').toLowerCase();
-
-    return (stockRecords ?? [])
-      .map((stock) => {
-        const product = productMap.get(String(stock.product));
-        const vendor = vendorMap.get(String(stock.mama_mboga));
-
-        if (!product || !vendor) return null;
-
+    return (products ?? [])
+      .map((product) => {
+        const vendor = vendorMap.get(String(product.vendor_id));
         const categoryName = categoryMap.get(String(product.category)) ?? 'Unknown';
-
-        const vendorName = `${vendor.first_name ?? ''} ${vendor.last_name ?? ''}`.trim() || `Vendor ${vendor.id}`;
-
+        const vendorName = vendor
+          ? `${vendor.first_name ?? ''} ${vendor.last_name ?? ''}`.trim() || `Vendor ${vendor.id}`
+          : 'Unknown Vendor';
         return {
-          listingId: stock.inventory_id,
           productId: product.product_id,
           productName: product.name,
           imageUrl: product.image_url ?? null,
-          pricePerUnit: Number(stock.price_per_unit),
-          currency: stock.currency ?? 'KES',
-          stockQuantity: Number(stock.current_stock_quantity),
-          vendorId: vendor.id,
+          pricePerUnit: Number(product.price_per_unit),
+          currency: product.currency ?? 'KES',
+          stockQuantity: Number(product.current_stock_quantity),
+          vendorId: product.vendor_id,
           vendorName,
           categoryId: product.category,
           categoryName,
         };
       })
-      .filter(Boolean)
       .filter((item) => {
         if (filters.categoryId && String(item.categoryId) !== filters.categoryId) return false;
         if (!filters.searchTerm) return true;
-
         const priceStr = isNaN(item.pricePerUnit) ? '' : item.pricePerUnit.toFixed(2);
-
         return (
           item.productName.toLowerCase().includes(searchLower) ||
           priceStr.includes(searchLower) ||
@@ -115,23 +85,19 @@ const ProductsPage = () => {
           item.vendorName.toLowerCase().includes(searchLower)
         );
       });
-  }, [stockRecords, products, vendors, categoryMap, filters]);
-
+  }, [products, vendors, categoryMap, filters]);
   const totalPages = Math.max(1, Math.ceil(enrichedProducts.length / PRODUCTS_PER_PAGE));
   const productsToShow = enrichedProducts.slice(
     (page - 1) * PRODUCTS_PER_PAGE,
     page * PRODUCTS_PER_PAGE
   );
-
   const handleNextPage = () => setPage((p) => Math.min(p + 1, totalPages));
   const handlePrevPage = () => setPage((p) => Math.max(p - 1, 1));
-  const isLoading = loadingProducts || loadingUsers || loadingCategories || loadingStock;
-  const combinedError = errorProducts || errorUsers || errorCategories || errorStock;
-
+  const isLoading = loadingProducts || loadingUsers || loadingCategories;
+  const combinedError = errorProducts || errorUsers || errorCategories;
   if (isLoading) {
     return <LoadingSpinner />;
   }
-
   if (combinedError) {
     return (
       <div className="products-page-container error-state">
@@ -143,7 +109,6 @@ const ProductsPage = () => {
             if (errorProducts) refetchProducts();
             if (errorUsers) refetchUsers();
             if (errorCategories) refetchCategories();
-            if (errorStock) refetchStockRecords();
           }}
           aria-label="Retry loading data"
         >
@@ -152,11 +117,9 @@ const ProductsPage = () => {
       </div>
     );
   }
-
   return (
     <div className="products-page-container">
       <h2>Product Lists For All Mama Mboga's</h2>
-
       <div className="filters-section">
         <div className="search-input-wrapper">
           <FontAwesomeIcon icon={faSearch} className="search-icon-inside-input" aria-hidden="true" />
@@ -170,7 +133,6 @@ const ProductsPage = () => {
             aria-label="Search products"
           />
         </div>
-
         <select
           name="categoryId"
           value={filters.categoryId}
@@ -185,7 +147,6 @@ const ProductsPage = () => {
             </option>
           ))}
         </select>
-
         <button
           type="button"
           onClick={() => setFilters({ searchTerm: '', categoryId: '' })}
@@ -194,14 +155,12 @@ const ProductsPage = () => {
         >
           Reset Filters
         </button>
-
         <button
           type="button"
           onClick={() => {
             refetchProducts();
             refetchUsers();
             refetchCategories();
-            refetchStockRecords();
           }}
           className="filter-reset-action custom-refresh-icon"
           aria-label="Refresh all data"
@@ -210,7 +169,6 @@ const ProductsPage = () => {
           <FontAwesomeIcon icon={faRefresh} />
         </button>
       </div>
-
       {productsToShow.length === 0 ? (
         <p className="no-products-message">No products found matching your criteria.</p>
       ) : (
@@ -228,7 +186,7 @@ const ProductsPage = () => {
             </thead>
             <tbody>
               {productsToShow.map((item) => (
-                <tr key={item.listingId} className="product-table-row">
+                <tr key={item.productId} className="product-table-row">
                   <td data-label="Image">
                     {item.imageUrl ? (
                       <img
@@ -257,7 +215,6 @@ const ProductsPage = () => {
           </table>
         </div>
       )}
-
       {enrichedProducts.length > 0 && (
         <nav className="pagination-controls" aria-label="Product list pagination">
           <button
@@ -284,5 +241,4 @@ const ProductsPage = () => {
     </div>
   );
 };
-
 export default ProductsPage;

@@ -4,7 +4,14 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export async function fetchData(endpoint) {
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${token}`,
+      },
+    });
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
@@ -17,7 +24,7 @@ export async function fetchData(endpoint) {
 
 export const fetchOrders = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/orders`, {
+    const response = await fetch(`${API_BASE_URL}/orders/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
