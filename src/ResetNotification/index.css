@@ -1,0 +1,214 @@
+.reset-notification-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 0;
+}
+
+.reset-notification-checkmark {
+  position: relative;
+  width: 350px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+
+.reset-notification-ellipse {
+  width: 350px;
+  height: 350px;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  object-fit: contain;
+}
+
+
+.reset-notification-title {
+  font-size: 70px;
+  font-weight: 700;
+  color: #111;
+  font-family: inherit;
+  letter-spacing: 1px;
+  margin: 32px 0 0 0;
+  text-align: center;
+}
+
+.reset-notification-message {
+  margin-top: 24px;
+  font-size: 32px;
+  color: #222;
+  text-align: center;
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+.reset-notification-button {
+  margin-top: 56px;
+  background: #00A216;
+  color: #fff;
+  font-size: 35px;
+  padding: 18px 70px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bolder;
+  letter-spacing: 2.5px;
+
+}
+
+.reset-notification-button:hover {
+  background: #00A216;
+  transform: translateY(-2px) scale(1.03);
+}
+
+.reset-notification-container {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  gap: 20px; 
+}
+
+.reset-notification-checkmark {
+  margin-bottom: 20px;
+}
+
+
+@media (width: 1024px) and (height:600) {
+  .reset-notification-container {
+    gap: 40px;
+
+  }
+.reset-notification-title{
+   margin-top: 25%!important;
+   margin-left: 13%;
+   font-size: 2rem;
+
+}
+.reset-notification-message {
+  margin-top: -8px;
+  font-size: 28px;
+  color: #222;
+  text-align: center;
+  line-height: 1.7;
+  max-width: 480px;
+  margin-left: 12%;
+}
+  .reset-notification-checkmark {
+    margin-right: 170px;
+      width: 50px!important;
+      height: 50px!important;
+  }
+
+.reset-notification-button {
+  margin-top: 5px;
+  background: #00A216;
+  color: #fff;
+  font-size: 35px;
+  padding: 16px 65px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bolder;
+  letter-spacing: 2.5px;
+  margin-left: 12%!important;
+
+}
+
+}
+@media (max-width: 1024px)  {
+  .reset-notification-container {
+    gap: 30px;
+    margin-left: -10%;
+  }
+.reset-notification-title{
+   margin-top: 15%!important;
+   margin-left: 13%;
+   font-size: 3.5rem;
+}
+.reset-notification-ellipse {
+  width: 270px;
+  height: 270px;
+  display: block;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  object-fit: contain;
+}
+.reset-notification-message {
+  margin-top: -35px;
+  font-size: 28px;
+  color: #222;
+  text-align: center;
+  line-height: 1.7;
+  max-width: 480px;
+  margin-left: 12%;
+}
+.reset-notification-button {
+  margin-top: -15px;
+  background: #00A216;
+  color: #fff;
+  font-size: 35px;
+  padding: 16px 65px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bolder;
+  letter-spacing: 2.5px;
+  margin-left: 12%!important;
+}
+ .reset-notification-checkmark {
+    margin-right: 40px;
+      width: 100px;
+      height: 150px;
+  }
+}
+@media (width: 1280px) {
+  .reset-notification-container {
+    gap: 40px;
+  }
+.reset-notification-title{
+   margin-top: 15%!important;
+   margin-left: 13%;
+}
+   .reset-notification-container {
+    gap: 30px;
+    margin-left: -15%;
+  }
+.reset-notification-message {
+  margin-top: -8px;
+  font-size: 28px;
+  color: #222;
+  text-align: center;
+  line-height: 1.7;
+  max-width: 480px;
+  margin-left: 12%;
+}
+  .reset-notification-checkmark {
+    margin-right: 40px;
+      width: 150px;
+      height: 150px;
+  }
+.reset-notification-button {
+  margin-top: 5px;
+  background: #00A216;
+  color: #fff;
+  font-size: 35px;
+  padding: 16px 65px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bolder;
+  letter-spacing: 2.5px;
+  margin-left: 12%!important;
+}
+}
