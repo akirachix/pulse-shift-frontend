@@ -89,10 +89,6 @@ export default function AdminDashboard() {
       filteredOrderIds.has(payment.order)
     );
 
-    console.log({mamambogas});
-    console.log({customers});
-    
-
     setDashboardData({
       summary: [
         { title: "Vendors", value: mamambogas?.length || 0 },
