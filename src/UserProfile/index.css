@@ -247,6 +247,8 @@ th, td {
   font-size: 1.1em;
 }
 
+
+
 @media (width: 1024px) and (height: 600px) {
   header {
     margin-bottom: 5%;
