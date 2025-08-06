@@ -3,12 +3,12 @@ const token = localStorage.getItem("token");
 
 export const fetchUsers = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/users`, {
+    const response = await fetch(`${API_BASE_URL}/users/`, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Token ${token},`
+        Authorization: `Token ${token}`
       },
     });
     if (!response.ok) {

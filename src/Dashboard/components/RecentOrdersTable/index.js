@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { formatDate } from "../../../utils/dateUtils";
 
@@ -8,7 +7,9 @@ const capitalizeFirstLetter = (str) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
 
 export default function RecentOrdersTable({ orders, customerMap }) {
+    console.log({customerMap});
     console.log({orders});
+    
     
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3; 
@@ -17,9 +18,6 @@ export default function RecentOrdersTable({ orders, customerMap }) {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
-
-    console.log({currentOrders});
-    
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -42,26 +40,21 @@ export default function RecentOrdersTable({ orders, customerMap }) {
                     <tbody>
                         {currentOrders.map((order, index) => (
                             <tr key={order.order_id}>
-                                <td>{index + 1}</td>
-                                <td>{formatDate(order.order_date)}</td>
-                                <td>{customerMap[order.customer] || "Unknown Customer"}</td>
+                                <td>{indexOfFirstItem + index + 1}</td>
+                                <td>{customerMap[order.customer] || "Yordanos Hagos"}</td>
+                                <td>{order.kiosk_name || "Greens Mtaani"}</td>
                                 <td>
                                     <span className={"status-badge " + (order.current_status?.toLowerCase() || '')}>
                                         {capitalizeFirstLetter(order.current_status)}
                                     </span>
                                 </td>
-                                <td>
-                                    <span className={"status-badge " + (order.payment_status?.toLowerCase() || '')}>
-                                        {capitalizeFirstLetter(order.payment_status)}
-                                    </span>
-                                </td>
+                                <td>{formatDate(order.order_date)}</td>
                                 <td>{numberWithCommas(parseFloat(order.total_amount || 0))}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-
             {totalPages > 1 && (
                 <div
                     style={{
@@ -117,7 +110,6 @@ export default function RecentOrdersTable({ orders, customerMap }) {
                         Next
                     </button>
                 </div>
-
             )}
         </div>
     );

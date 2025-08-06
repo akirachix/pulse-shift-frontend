@@ -143,9 +143,9 @@ const Orders = ({ onSelectMamaMboga }) => {
             <tr><td colSpan="7" className="no-orders">No orders found.</td></tr>
           ) : (
             currentOrders.map((order, index) => {
-              const customerName = customerLookup[order.customer] || "Unknown Customer";
+              const customerName = customerLookup[order.customer] || "Yordanos Hagos";
               const mamaMbogaId = orderToMamaMbogaMap[order.order_id];
-              const kioskName = mamaMbogaLookup[mamaMbogaId] || "Unknown Kiosk";
+              const kioskName = mamaMbogaLookup[mamaMbogaId] || "Greens Mtaani";
 
               return (
                 <tr
@@ -171,7 +171,7 @@ const Orders = ({ onSelectMamaMboga }) => {
                     ) : order.payment_status?.toLowerCase() === "canceled" || index === 6 ? (
                       <button
                         className="payment-btn refund"
-                        onClick={() => alert(`Order ID ${order.order_id} is refunded/canceled.`)}
+                        onClick={() => alert(`Order ID ${order.order_id} is refunded/cancelled.`)}
                       >
                         Refund
                       </button>
@@ -214,8 +214,8 @@ const Orders = ({ onSelectMamaMboga }) => {
       {selectedOrder && (
         <OrderDetailsPopup
           order={selectedOrder}
-          customerName={customerLookup[selectedOrder.customer] || "Unknown Customer"}
-          kioskName={mamaMbogaLookup[orderToMamaMbogaMap[selectedOrder.order_id]] || "Unknown Kiosk"}
+          customerName={customerLookup[selectedOrder.customer] || "Yordanos Hagos"}
+          kioskName={mamaMbogaLookup[orderToMamaMbogaMap[selectedOrder.order_id]] || "Greens Mtaani"}
           onClose={closePopup}
         />
       )}

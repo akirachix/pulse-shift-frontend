@@ -4,7 +4,7 @@ const token = localStorage.getItem("token");
 
 export async function fetchCategories() {
   try {
-    const response = await fetch(`${API_BASE_URL}/product-category`,{
+    const response = await fetch(`${API_BASE_URL}/product-category/`,{
       method: 'GET',
       headers: {
       "Content-Type": "application/json",

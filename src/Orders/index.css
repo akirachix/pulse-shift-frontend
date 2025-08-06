@@ -9,6 +9,7 @@ body{
 }
 .orders-page {
   margin-top: 20px;
+  margin-left: 5%;
   margin-bottom: 30px;
   background: #fff;
   padding: 20px;
@@ -53,6 +54,9 @@ body{
   border: 1px solid #ccc;
   font-size: 1em;
   min-width: 150px;
+}
+.orders-table{
+  margin: 0 auto;
 }
 .orders-table tbody tr.order-row {
   margin-bottom: 12px; 

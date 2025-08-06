@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "https://greensmtaani-d6ee50db917a.herokuapp.com";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 async function fetchData(endpoint, method = "GET", body = null) {
   const options = {
