@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useSigninUser } from "../hooks/useSigninUser";
 import "./index.css";
+import { useAuth } from "../AuthContext";
 
 const SignIn = ({ onLoginSuccess }) => {
   const [form, setForm] = useState({ username: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
+ const { isAuthenticated } = useAuth();
   const { signin, error, loading, success } = useSigninUser(onLoginSuccess);
+  if (isAuthenticated) return <Navigate to="/" replace />;
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));

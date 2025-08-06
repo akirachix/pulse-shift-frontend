@@ -20,7 +20,9 @@ const Orders = ({ onSelectMamaMboga }) => {
 
   const customerLookup = users.reduce((acc, user) => {
     if (user.user_type === "customer") {
-      acc[user.id] = `${user.first_name} ${user.last_name}`;
+      acc[user.id] = user.first_name && user.last_name 
+        ? `${user.first_name} ${user.last_name}`
+        : "Yordanos Hagos";
     }
     return acc;
   }, {});

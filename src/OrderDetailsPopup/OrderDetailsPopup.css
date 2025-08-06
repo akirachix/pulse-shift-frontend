@@ -64,6 +64,7 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
+  margin-left: 2%;
 }
 
 .order-items-table th,
@@ -75,7 +76,7 @@
 }
 
 .order-items-table th {
-  background: #e6e3e3;
+  background: #a5a3a3;
   font-weight: 600;
   font-size: 16px;
 }
